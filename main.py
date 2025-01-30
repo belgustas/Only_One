@@ -1,16 +1,39 @@
-# This is a sample Python script.
+import pygame
+from Movement import Player
+import values as v
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+pygame.init()
+screen = pygame.display.set_mode((500, 500))
+pygame.display.set_caption("Мой мир")
+clock = pygame.time.Clock()
+all_sprites = pygame.sprite.Group()
+player = Player()
+all_sprites.add(player)
+# Цикл игры
+running = True
+while running:
+    events = pygame.event.get()
+    for event in events:
+        if event.type == pygame.QUIT:
+            running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                v.KEY = 'left'
+            elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                v.KEY = 'right'
+            elif event.key == pygame.K_UP or event.key == pygame.K_w:
+                v.KEY = 'up'
+            elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                v.KEY = 'down'
+        elif event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or \
+                    event.key == pygame.K_UP or event.key == pygame.K_DOWN or event.key == pygame.K_a or \
+                    event.key == pygame.K_s or event.key == pygame.K_w or event.key == pygame.K_d:
+                v.KEY = 'stop'
+    all_sprites.update()
+    clock.tick(30)
+    screen.fill(pygame.Color('black'))
+    all_sprites.draw(screen)
+    pygame.display.flip()
 
-print('')
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+pygame.quit()
