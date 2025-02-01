@@ -1,0 +1,51 @@
+import pygame
+
+
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self, x, y, target):
+        super().__init__()
+        self.sprite_sheet = pygame.image.load("img/Enemy.png").convert_alpha()
+        self.ROWS = {"up": 8, "down": 10, "left": 9, "right": 11}
+
+        # Загрузка анимации
+        self.animations = {direction: [] for direction in self.ROWS}
+        for direction, row in self.ROWS.items():
+            for col in range(9):
+                frame = self.sprite_sheet.subsurface(pygame.Rect(col * 64, row * 64, 64, 64))
+                self.animations[direction].append(frame)
+
+        self.image = self.animations["down"][0]  # Начальный спрайт
+        self.rect = self.image.get_rect(center=(x, y))
+
+        self.target = target    # бегать за целью
+        self.speed = 1.25  # Скорость врага
+        self.frame_index = 0
+        self.frame_delay = 100
+        self.last_update = pygame.time.get_ticks()
+        self.current_direction = "down"
+
+    def update(self):
+        self.move_towards_player()
+        self.animate()
+
+    def move_towards_player(self):
+        if self.rect.x < self.target.rect.x:
+            self.rect.x += self.speed
+            self.current_direction = "right"
+        elif self.rect.x > self.target.rect.x:
+            self.rect.x -= self.speed
+            self.current_direction = "left"
+
+        if self.rect.y < self.target.rect.y:
+            self.rect.y += self.speed
+            self.current_direction = "down"
+        elif self.rect.y > self.target.rect.y:
+            self.rect.y -= self.speed
+            self.current_direction = "up"
+
+    def animate(self):
+        now_tick = pygame.time.get_ticks()
+        if now_tick - self.last_update > self.frame_delay:
+            self.frame_index = (self.frame_index + 1) % 9
+            self.image = self.animations[self.current_direction][self.frame_index]
+            self.last_update = now_tick

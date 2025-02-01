@@ -1,5 +1,6 @@
 import pygame
 from player import Player  # Импорт
+from enemy import Enemy
 
 
 pygame.init()
@@ -13,7 +14,8 @@ background = pygame.image.load("img/arena.png").convert()
 # Создание группы спрайтов
 all_sprites = pygame.sprite.Group()
 player = Player(WIDTH // 2, HEIGHT // 2)
-all_sprites.add(player)
+enemy = Enemy(100, 100, player)
+all_sprites.add(player, enemy)
 running = True
 clock = pygame.time.Clock()
 

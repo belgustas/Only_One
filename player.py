@@ -8,62 +8,50 @@ class Player(pygame.sprite.Sprite):
 
         self.sprite_sheet = pygame.image.load("img/Player.png").convert_alpha()
 
-        # Параметры спрайтов
-        self.SPRITE_WIDTH = 64
-        self.SPRITE_HEIGHT = 64
-        self.COLS = 9
-        self.IDLE_ROW = 2
-        self.IDLE_FRAME = 0
-
         # Ряды в спрайт шите для анимации хотьбы
-        self.ROWS = {"UP": 8, "DOWN": 10, "LEFT": 9, "RIGHT": 11}
+        self.ROWS = {"up": 8, "down": 10, "left": 9, "right": 11}
 
         # Создание списков кадров
         self.animations = {direction: [] for direction in self.ROWS}
         for direction, row in self.ROWS.items():
-            for col in range(self.COLS):
+            for col in range(9):
                 frame = self.sprite_sheet.subsurface(
-                    pygame.Rect(col * self.SPRITE_WIDTH, row * self.SPRITE_HEIGHT, self.SPRITE_WIDTH,
-                                self.SPRITE_HEIGHT)
-                )
+                    pygame.Rect(col * 64, row * 64, 64, 64))
                 self.animations[direction].append(frame)
 
-        # Кадр покоя
-        self.idle_frame = self.sprite_sheet.subsurface(
-            pygame.Rect(self.IDLE_FRAME * self.SPRITE_WIDTH, self.IDLE_ROW * self.SPRITE_HEIGHT, self.SPRITE_WIDTH,
-                        self.SPRITE_HEIGHT)
-        )
+        # Кадр стоячего
+        self.stop_cadr = self.sprite_sheet.subsurface(pygame.Rect(0 * 64, 2 * 64, 64, 64))
 
-        self.image = self.idle_frame  # Начальный спрайт
+        self.image = self.stop_cadr
         self.rect = self.image.get_rect(center=(x, y))
 
         self.speed = 3
-        self.current_direction = "DOWN"
+        self.KEY = "down"
         self.is_moving = False
         self.frame_index = 0
         self.frame_delay = 100
         self.last_update = pygame.time.get_ticks()
 
     def update(self):
-        self.move()
-        self.animate()
+        self.run()
+        self.animation()
 
-    def move(self):
+    def run(self):
         keys = pygame.key.get_pressed()
-        dx, dy = 0, 0
+        player_x, player_y = 0, 0
 
         if keys[pygame.K_w]:
-            dy -= self.speed
-            self.current_direction = "UP"
+            player_y -= self.speed
+            self.KEY = "up"
         if keys[pygame.K_s]:
-            dy += self.speed
-            self.current_direction = "DOWN"
+            player_y += self.speed
+            self.KEY = "down"
         if keys[pygame.K_a]:
-            dx -= self.speed
-            self.current_direction = "LEFT"
+            player_x -= self.speed
+            self.KEY = "left"
         if keys[pygame.K_d]:
-            dx += self.speed
-            self.current_direction = "RIGHT"
+            player_x += self.speed
+            self.KEY = "right"
 
         # проверка, что человек не выбежал за поле
         if self.rect.left < -20:
@@ -76,21 +64,21 @@ class Player(pygame.sprite.Sprite):
             self.rect.bottom = 500
 
         # Проверка диагонального движения
-        if dx != 0 and dy != 0:
-            dx /= math.sqrt(2)  # уменьшаем скорость, чтобы игрок не летал по диагонали
-            dy /= math.sqrt(2)
+        if player_x != 0 and player_y != 0:
+            player_x /= math.sqrt(2)  # уменьшаем скорость, чтобы игрок не летал по диагонали
+            player_y /= math.sqrt(2)
 
-        self.rect.x += dx
-        self.rect.y += dy
-        self.is_moving = dx != 0 or dy != 0
+        self.rect.x += player_x
+        self.rect.y += player_y
+        self.is_moving = player_x != 0 or player_y != 0
 
     # анимация
-    def animate(self):
+    def animation(self):
         if self.is_moving:
             current_time = pygame.time.get_ticks()
             if current_time - self.last_update > self.frame_delay:
-                self.frame_index = (self.frame_index + 1) % self.COLS
-                self.image = self.animations[self.current_direction][self.frame_index]
+                self.frame_index = (self.frame_index + 1) % 9
+                self.image = self.animations[self.KEY][self.frame_index]
                 self.last_update = current_time
         else:
-            self.image = self.idle_frame
+            self.image = self.stop_cadr
