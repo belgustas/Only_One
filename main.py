@@ -1,39 +1,35 @@
 import pygame
-from Movement import Player
-import values as v
+from player import Player  # Импорт
+
 
 pygame.init()
-screen = pygame.display.set_mode((500, 500))
-pygame.display.set_caption("Мой мир")
-clock = pygame.time.Clock()
+
+# Настройки окна
+WIDTH, HEIGHT = 500, 500
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Анимация персонажа")
+background = pygame.image.load("img/arena.png").convert()
+
+# Создание группы спрайтов
 all_sprites = pygame.sprite.Group()
-player = Player()
+player = Player(WIDTH // 2, HEIGHT // 2)
 all_sprites.add(player)
-# Цикл игры
 running = True
+clock = pygame.time.Clock()
+
 while running:
-    events = pygame.event.get()
-    for event in events:
+    screen.blit(background, (0, 0))
+
+    # Обработчик событий
+    for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT or event.key == pygame.K_a:
-                v.KEY = 'left'
-            elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                v.KEY = 'right'
-            elif event.key == pygame.K_UP or event.key == pygame.K_w:
-                v.KEY = 'up'
-            elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
-                v.KEY = 'down'
-        elif event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or \
-                    event.key == pygame.K_UP or event.key == pygame.K_DOWN or event.key == pygame.K_a or \
-                    event.key == pygame.K_s or event.key == pygame.K_w or event.key == pygame.K_d:
-                v.KEY = 'stop'
+
+    # Обновление всех спрайтов
     all_sprites.update()
-    clock.tick(30)
-    screen.fill(pygame.Color('black'))
     all_sprites.draw(screen)
+
     pygame.display.flip()
+    clock.tick(60)  # FPS
 
 pygame.quit()
