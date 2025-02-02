@@ -116,8 +116,8 @@ class Bullet(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=(player_x, player_y))
 
         # Вычисляем направление пули
-        dx, dy = mouse_x - player_x, mouse_y - player_y
-        distance = math.sqrt(dx ** 2 + dy ** 2)
+        now_x, now_y = mouse_x - player_x, mouse_y - player_y
+        distance = math.sqrt(now_x ** 2 + now_y ** 2)
 
         dx, dy = mouse_x - player_x, mouse_y - player_y
         self.degrees = math.degrees(math.atan2(-dy, dx))  # Угол в градусах
@@ -129,10 +129,16 @@ class Bullet(pygame.sprite.Sprite):
             self.velocity = (0, 0)  # На случай, если расстояние 0
 
     def update(self):
-        self.rect.x += self.velocity[0]
-        self.rect.y += self.velocity[1]
-
+        if self.velocity != 0:
+            self.rect.x += self.velocity[0]
+            self.rect.y += self.velocity[1]
         # Удаление пули, если она вышла за границы экрана
-        if self.rect.right < 0 or self.rect.left > 800 or self.rect.bottom < 0 or self.rect.top > 600:
-            self.kill()
+        if self.rect.left < -10:
+            self.velocity = 0
+        if self.rect.right > 660:
+            self.velocity = 0
+        if self.rect.top < -10:
+            self.velocity = 0
+        if self.rect.bottom > 640:
+            self.velocity = 0
 
