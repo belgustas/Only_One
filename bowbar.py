@@ -1,5 +1,6 @@
 import pygame
 
+
 class BowBar(pygame.sprite.Sprite):
     def __init__(self, counter):
         pygame.sprite.Sprite.__init__(self)
@@ -16,5 +17,4 @@ class BowBar(pygame.sprite.Sprite):
             self.count += 1
         else:
             self.rect.x = 0
-
 
