@@ -8,6 +8,7 @@ class Player(pygame.sprite.Sprite):
         self.all_sprites = all_sprites
         self.sprite_sheet = pygame.image.load("img/Player.png").convert_alpha()
 
+
         # Ряды в спрайт шите для анимации хотьбы
         self.ROWS = {"up": 8, "down": 10, "left": 9, "right": 11, "shoot_up": 16, "shoot_down": 18, "shoot_left": 17,
                      "shoot_right": 19}
@@ -86,10 +87,11 @@ class Player(pygame.sprite.Sprite):
 
         # Определение направления стрельбы
         dx, dy = mouse_x - self.rect.centerx, mouse_y - self.rect.centery
-        if abs(dx) > abs(dy):
-            self.KEY = "shoot_right" if dx > 0 else "shoot_left"
-        else:
-            self.KEY = "shoot_down" if dy > 0 else "shoot_up"
+        if counter >= 150:
+            if abs(dx) > abs(dy):
+                self.KEY = "shoot_right" if dx > 0 else "shoot_left"
+            else:
+                self.KEY = "shoot_down" if dy > 0 else "shoot_up"
 
         # Устанавливаем начальный кадр анимации стрельбы
         self.frame_index = 0
@@ -141,4 +143,3 @@ class Bullet(pygame.sprite.Sprite):
             self.velocity = 0
         if self.rect.bottom > 640:
             self.velocity = 0
-
