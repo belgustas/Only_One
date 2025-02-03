@@ -1,4 +1,6 @@
 import pygame
+from bars import HealthBar
+
 
 
 class BowBar(pygame.sprite.Sprite):
