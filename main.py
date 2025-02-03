@@ -41,6 +41,10 @@ while running:
                 bow.update()
                 bow.count = 1
 
+
+
+
+
     # Обновление всех спрайтов
     all_sprites.update()
     all_sprites.draw(screen)
