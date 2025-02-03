@@ -1,6 +1,6 @@
 import pygame
 from player import Player  # Импортируем класс игрока
-from enemy import Enemy  # Импортируем класс врага
+from enemy import Enemy# Импортируем класс врага
 from bowbar import BowBar
 
 pygame.init()
@@ -12,6 +12,7 @@ pygame.display.set_caption("Only one!")
 background = pygame.image.load("img/arena.png").convert()
 # Создание группы спрайтов
 all_sprites = pygame.sprite.Group()
+
 
 player = Player(WIDTH // 2, HEIGHT // 2, all_sprites)
 enemy = Enemy(100, 100, player)
