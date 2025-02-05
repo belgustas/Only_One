@@ -1,9 +1,12 @@
+import sys
+
 import pygame
 import math
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y, all_sprites):
+    def __init__(self, x, y, all_sprites, hp):
+        self.hp = hp
         super().__init__()
         self.all_sprites = all_sprites
 
@@ -28,7 +31,6 @@ class Player(pygame.sprite.Sprite):
 
         self.image = self.stop_cadr
         self.rect = self.image.get_rect(center=(x, y))
-
         self.speed = 3
         self.KEY = "down"
         self.is_moving = False
@@ -40,7 +42,9 @@ class Player(pygame.sprite.Sprite):
 
     def collide(self, enemy):
         if self.rect.colliderect(enemy):
-            print("ouch")
+            self.hp -= 1
+        if self.hp <= 0:
+            sys.exit()
 
     def update(self):
         self.run()
