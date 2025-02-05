@@ -18,7 +18,6 @@ def leaders():
     but1 = But(0, 0, 70, "return.png")
     all_sprites.add(but1)
 
-
     while running:
         screen.blit(background, (-50, -50))
 
@@ -30,7 +29,6 @@ def leaders():
                 mouse_x, mouse_y = pygame.mouse.get_pos()
                 but1.clicked(mouse_x, mouse_y, Begining)
 
-
         all_sprites.update()
         all_sprites.draw(screen)
 
@@ -38,4 +36,3 @@ def leaders():
         clock.tick(60)  # FPS
 
     pygame.quit()
-

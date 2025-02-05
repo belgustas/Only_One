@@ -17,4 +17,3 @@ class BowBar(pygame.sprite.Sprite):
             self.count += 5
         else:
             self.rect.x = 0
-

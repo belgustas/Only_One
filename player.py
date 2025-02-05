@@ -3,7 +3,7 @@ import math
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y, all_sprites):
+    def __init__(self, x, y, all_sprites, hp):
         super().__init__()
         self.all_sprites = all_sprites
 
@@ -26,9 +26,9 @@ class Player(pygame.sprite.Sprite):
         # Кадр стоячего игрока
         self.stop_cadr = self.sprite_sheet.subsurface(pygame.Rect(0, 2 * 64, 64, 64))
 
+        # Константы
         self.image = self.stop_cadr
         self.rect = self.image.get_rect(center=(x, y))
-
         self.speed = 3
         self.KEY = "down"
         self.is_moving = False
@@ -37,6 +37,10 @@ class Player(pygame.sprite.Sprite):
         self.frame_delay = 100
         self.last_update = pygame.time.get_ticks()
         self.afk_timer = 0
+        self.hp = hp
+
+    def collide(self, enemy):
+        pass
 
     def update(self):
         self.run()
@@ -95,9 +99,15 @@ class Player(pygame.sprite.Sprite):
         # Определение направления стрельбы
         dx, dy = mouse_x - self.rect.centerx, mouse_y - self.rect.centery
         if abs(dx) > abs(dy):
-            self.KEY = "shoot_right" if dx > 0 else "shoot_left"
+            if dx > 0:
+                self.KEY = "shoot_right"
+            else:
+                self.KEY = "shoot_left"
         else:
-            self.KEY = "shoot_down" if dy > 0 else "shoot_up"
+            if dy > 0:
+                self.KEY = "shoot_down"
+            else:
+                self.KEY = "shoot_up"
 
         # Запуск анимации стрельбы
         self.is_shooting = True
@@ -129,6 +139,7 @@ class Player(pygame.sprite.Sprite):
             self.image = self.stop_cadr  # Если прошло 10 секунд без движения — ставим AFK-кадр
 
 
+
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, player_x, player_y, mouse_x, mouse_y):
         super().__init__()
@@ -155,10 +166,35 @@ class Bullet(pygame.sprite.Sprite):
             self.rect.y += self.velocity[1]
         # Удаление пули, если она вышла за границы экрана
         if self.rect.left < -10:
-            self.velocity = 0
+            self.kill()
         if self.rect.right > 660:
-            self.velocity = 0
+            self.kill()
         if self.rect.top < -10:
-            self.velocity = 0
+            self.kill()
         if self.rect.bottom > 640:
-            self.velocity = 0
+            self.kill()
+
+
+class HealthBarPlayer(pygame.sprite.Sprite):
+    def __init__(self, player, w, h, max_hp):
+        super().__init__()
+        self.player = player  # Связываем хп с игроком
+        self.w = w
+        self.h = h
+        self.hp = max_hp
+        self.max_hp = max_hp
+        self.x = self.player.rect.centerx - self.w // 2  # Центрируем по х
+        self.y = self.player.rect.top - self.h - 5  # Чуть выше игрока
+
+    def hurt(self):
+        self.hp -= 1
+
+    def update(self):
+        # координаты игрока
+        self.x = self.player.rect.centerx - self.w // 2
+        self.y = self.player.rect.top - self.h - 5
+
+    def draw(self, surface):
+        count_hp = self.hp / self.max_hp  # Рассчитываем % здоровья
+        pygame.draw.rect(surface, "red", (self.x, self.y, self.w, self.h))  # Фон (красный)
+        pygame.draw.rect(surface, "green", (self.x, self.y, self.w * count_hp, self.h))  # Текущий хп (зеленый)

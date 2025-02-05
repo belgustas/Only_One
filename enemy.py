@@ -32,6 +32,7 @@ class Enemy(pygame.sprite.Sprite):
         if self.rect.x < self.target.rect.x:
             self.rect.x += self.speed
             self.current_direction = "right"
+
         elif self.rect.x > self.target.rect.x:
             self.rect.x -= self.speed
             self.current_direction = "left"
@@ -49,3 +50,25 @@ class Enemy(pygame.sprite.Sprite):
             self.frame_index = (self.frame_index + 1) % 9
             self.image = self.animations[self.current_direction][self.frame_index]
             self.last_update = now_tick
+
+
+class HealthBarEnemy(pygame.sprite.Sprite):
+    def __init__(self, enemy, w, h, max_hp):
+        super().__init__()
+        self.enemy = enemy  # Связываем хп с врага
+        self.w = w
+        self.h = h
+        self.hp = max_hp
+        self.max_hp = max_hp
+        self.x = self.enemy.rect.centerx - self.w // 2  # Центрируем по х
+        self.y = self.enemy.rect.top - self.h - 5  # Чуть выше игрока
+
+    def update(self):
+        # координаты игрока
+        self.x = self.enemy.rect.centerx - self.w // 2
+        self.y = self.enemy.rect.top - self.h - 5
+
+    def draw(self, surface):
+        count_hp = self.hp / self.max_hp  # Рассчитываем % здоровья
+        pygame.draw.rect(surface, "red", (self.x, self.y, self.w, self.h))  # Фон (красный)
+        pygame.draw.rect(surface, "green", (self.x, self.y, self.w * count_hp, self.h))  # Текущий хп (зеленый)

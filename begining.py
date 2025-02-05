@@ -2,6 +2,7 @@ import pygame
 import sys
 import os
 
+
 def load_image(name, colorkey=None):
     fullname = os.path.join(name)
     # если файл не существует, то выходим
@@ -10,6 +11,7 @@ def load_image(name, colorkey=None):
         sys.exit()
     image = pygame.image.load(fullname)
     return image
+
 
 class But(pygame.sprite.Sprite):
     def __init__(self, WIDTH, HEIGHT, low, name):
@@ -21,11 +23,10 @@ class But(pygame.sprite.Sprite):
         self.low = low
 
     def clicked(self, x, y, func):
-        print(x, y)
-        print(self.rect.x, self.rect.y)
-        if ((x >= self.rect.x) and (x <= self.rect.x + self.low)) and ((y >= self.rect.y) and (y <= self.rect.y + self.low)):
-            print()
+        if ((x >= self.rect.x) and (x <= self.rect.x + self.low)) and (
+                (y >= self.rect.y) and (y <= self.rect.y + self.low)):
             func()
+
 
 def Begining():
     from main import main
@@ -54,6 +55,7 @@ def Begining():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
                 but1.clicked(mouse_x, mouse_y, Settings)
@@ -71,7 +73,5 @@ def Begining():
 
     pygame.quit()
 
+
 Begining()
-
-
-
