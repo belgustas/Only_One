@@ -38,6 +38,10 @@ class Player(pygame.sprite.Sprite):
         self.last_update = pygame.time.get_ticks()
         self.afk_timer = 0
 
+    def collide(self, enemy):
+        if self.rect.colliderect(enemy):
+            print("ouch")
+
     def update(self):
         self.run()
         self.animation()

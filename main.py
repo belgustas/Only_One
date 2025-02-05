@@ -5,8 +5,11 @@ from enemy import Enemy  # Импортируем класс врага
 from bowbar import BowBar
 
 
+
 def main():
     from begining import Begining
+    from begining import But
+
     pygame.init()
 
     # Настройки окна
@@ -16,15 +19,19 @@ def main():
     background = pygame.image.load("img/arena_img.png").convert()
     # Создание группы спрайтов
     all_sprites = pygame.sprite.Group()
+    menu_sprites = pygame.sprite.Group()
 
     player = Player(WIDTH // 2, HEIGHT // 2, all_sprites)
     enemy = Enemy(100, 100, player)
     all_sprites.add(player, enemy)
     running = True
+    menuning = True
+    counter = 0
     clock = pygame.time.Clock()
     bow = BowBar(0)
     all_sprites.add(bow)
-
+    again = But(WIDTH // 2 - 35, HEIGHT // 3, 70, "return.png")
+    menu_sprites.add(again)
     while running:
         screen.blit(background, (0, 0))
 
@@ -45,9 +52,21 @@ def main():
                     bow.count = 1
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    Begining()
+                    if menuning:
+                        menuning = False
+                    else:
+                        menuning = True
 
 
+        if menuning:
+            menu_sprites.update()
+            menu_sprites.draw(screen)
+            player.speed = 0
+            enemy.speed = 0
+        else:
+            player.speed = 3
+            enemy.speed = 1.25
+        player.collide(enemy.rect)
         # Обновление всех спрайтов
         all_sprites.update()
         all_sprites.draw(screen)
