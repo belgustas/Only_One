@@ -17,7 +17,7 @@ class Enemy(pygame.sprite.Sprite):
         self.image = self.animations["down"][0]  # Начальный спрайт
         self.rect = self.image.get_rect(center=(x, y))
 
-        self.target = target    # бегать за целью
+        self.target = target  # бегать за целью
         self.speed = 1.25  # Скорость врага
         self.frame_index = 0
         self.frame_delay = 100

@@ -1,6 +1,4 @@
 import pygame
-from bars import HealthBar
-
 
 
 class BowBar(pygame.sprite.Sprite):
@@ -15,8 +13,8 @@ class BowBar(pygame.sprite.Sprite):
         if self.count > 150:
             self.rect.x = 150
         elif self.count != 0:
-            self.rect.x += 1
-            self.count += 1
+            self.rect.x += 5
+            self.count += 5
         else:
             self.rect.x = 0
 
