@@ -34,11 +34,11 @@ class But(pygame.sprite.Sprite):
         self.rect.y = HEIGHT
         self.low = low
 
-    def clicked(self, x, y):
+    def clicked(self, x, y, func):
         print(x, y)
         print(self.rect.x, self.rect.y)
         if ((x >= self.rect.x) and (x <= self.rect.x + self.low)) and ((y >= self.rect.y) and (y <= self.rect.y + self.low)):
-            main()
+            func
 
 but1 = But(WIDTH // 3 - 50, HEIGHT // 2 - 35, 70, "settings.png")
 but2 = But(WIDTH // 2 - 50, HEIGHT // 2 - 50, 100, "Play.png")
@@ -54,9 +54,9 @@ while running:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            but1.clicked(mouse_x, mouse_y)
-            but2.clicked(mouse_x, mouse_y)
-            but3.clicked(mouse_x, mouse_y)
+            but1.clicked(mouse_x, mouse_y, main())
+            but2.clicked(mouse_x, mouse_y, main())
+            but3.clicked(mouse_x, mouse_y, main())
 
 
     all_sprites.update()
