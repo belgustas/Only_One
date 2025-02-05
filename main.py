@@ -1,9 +1,12 @@
 import pygame
+
 from player import Player  # Импортируем класс игрока
 from enemy import Enemy  # Импортируем класс врага
 from bowbar import BowBar
 
+
 def main():
+    from begining import Begining
     pygame.init()
 
     # Настройки окна
@@ -40,6 +43,9 @@ def main():
                 if event.key == pygame.K_SPACE:
                     bow.update()
                     bow.count = 1
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    Begining()
 
 
         # Обновление всех спрайтов

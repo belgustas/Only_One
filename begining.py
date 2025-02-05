@@ -1,19 +1,6 @@
 import pygame
 import sys
 import os
-from main import main
-
-pygame.init()
-
-WIDTH, HEIGHT = 650, 650
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Begining")
-background = pygame.image.load("backgroundfor.jpg").convert()
-background = pygame.transform.scale(background, (750, 750))
-all_sprites = pygame.sprite.Group()
-
-running = True
-clock = pygame.time.Clock()
 
 def load_image(name, colorkey=None):
     fullname = os.path.join(name)
@@ -23,7 +10,6 @@ def load_image(name, colorkey=None):
         sys.exit()
     image = pygame.image.load(fullname)
     return image
-
 
 class But(pygame.sprite.Sprite):
     def __init__(self, WIDTH, HEIGHT, low, name):
@@ -38,37 +24,54 @@ class But(pygame.sprite.Sprite):
         print(x, y)
         print(self.rect.x, self.rect.y)
         if ((x >= self.rect.x) and (x <= self.rect.x + self.low)) and ((y >= self.rect.y) and (y <= self.rect.y + self.low)):
-            func
+            print()
+            func()
 
-but1 = But(WIDTH // 3 - 50, HEIGHT // 2 - 35, 70, "settings.png")
-but2 = But(WIDTH // 2 - 50, HEIGHT // 2 - 50, 100, "Play.png")
-but3 = But(WIDTH // 3 * 2 - 20, HEIGHT // 2 - 35, 70, "leaders.png")
-all_sprites.add(but1, but2, but3)
+def Begining():
+    from main import main
+    from leaders import leaders
+    from settings import Settings
+    pygame.init()
 
-while running:
-    screen.blit(background, (-50, -50))
+    WIDTH, HEIGHT = 650, 650
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("Begining")
+    background = pygame.image.load("backgroundfor.jpg").convert()
+    background = pygame.transform.scale(background, (750, 750))
+    all_sprites = pygame.sprite.Group()
 
-    # Обработчик событий
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            mouse_x, mouse_y = pygame.mouse.get_pos()
-            but1.clicked(mouse_x, mouse_y, main())
-            but2.clicked(mouse_x, mouse_y, main())
-            but3.clicked(mouse_x, mouse_y, main())
+    running = True
+    clock = pygame.time.Clock()
+    but1 = But(WIDTH // 3 - 50, HEIGHT // 2 - 35, 70, "settings.png")
+    but2 = But(WIDTH // 2 - 50, HEIGHT // 2 - 50, 100, "Play.png")
+    but3 = But(WIDTH // 3 * 2 - 20, HEIGHT // 2 - 35, 70, "leaders.png")
+    all_sprites.add(but1, but2, but3)
 
+    while running:
+        screen.blit(background, (-50, -50))
 
-    all_sprites.update()
-    all_sprites.draw(screen)
+        # Обработчик событий
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+                but1.clicked(mouse_x, mouse_y, Settings)
+                but2.clicked(mouse_x, mouse_y, main)
+                but3.clicked(mouse_x, mouse_y, leaders)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
 
-    pygame.display.flip()
-    clock.tick(60)  # FPS
+        all_sprites.update()
+        all_sprites.draw(screen)
 
-pygame.quit()
+        pygame.display.flip()
+        clock.tick(60)  # FPS
 
+    pygame.quit()
 
-
+Begining()
 
 
 
