@@ -39,8 +39,12 @@ class Player(pygame.sprite.Sprite):
         self.afk_timer = 0
         self.hp = hp
 
-    def collide(self, enemy):
-        pass
+    def collide(self, health_bar_player, enemy):
+        if self.rect.colliderect(enemy):
+            self.hp -= 1
+            health_bar_player.hp -= 1
+        if self.hp <= 0:
+            self.kill()
 
     def update(self):
         self.run()

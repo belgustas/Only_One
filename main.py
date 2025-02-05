@@ -17,7 +17,7 @@ def main():
     # Создание группы спрайтов
     all_sprites = pygame.sprite.Group()
     bow = BowBar(0)
-    player = Player(WIDTH // 2, HEIGHT // 2, all_sprites, 10)
+    player = Player(WIDTH // 2, HEIGHT // 2, all_sprites, 100)
     health_bar_player = HealthBarPlayer(player, 50, 5, player.hp)
     enemy = Enemy(100, 100, player)
     health_bar_enemy = HealthBarEnemy(enemy, 50, 5, 10)
@@ -53,9 +53,10 @@ def main():
         health_bar_player.update()
         health_bar_enemy.update()
         all_sprites.update()
+
+        player.collide(health_bar_player, enemy)
         health_bar_player.draw(screen)
         health_bar_enemy.draw(screen)
-
         pygame.display.flip()
         clock.tick(60)  # FPS
 
