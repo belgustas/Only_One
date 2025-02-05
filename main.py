@@ -6,7 +6,7 @@ from bowbar import BowBar  # Импортируем тетиву
 
 
 def main():
-    from begining import Begining
+    from begining import But
     pygame.init()
 
     # Настройки окна
@@ -23,7 +23,12 @@ def main():
     health_bar_enemy = HealthBarEnemy(enemy, 50, 5, 10)
     all_sprites.add(player, enemy, bow)
     running = True
+    menuning = True
     clock = pygame.time.Clock()
+
+    menu_sprites = pygame.sprite.Group()
+    again = But(0, 0, 70, "return.png")
+    menu_sprites.add(again)
 
     while running:
         screen.blit(background, (0, 0))
@@ -46,7 +51,19 @@ def main():
                     bow.count = 1
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    Begining()
+                    if menuning:
+                        menuning = False
+                    else:
+                        menuning = True
+
+        if menuning:
+            player.speed = 0
+            enemy.speed = 0
+            menu_sprites.draw(screen)
+            menu_sprites.update()
+        else:
+            player.speed = 3
+            enemy.speed = 1.25
 
         # Обновление всех спрайтов
         all_sprites.draw(screen)
