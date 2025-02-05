@@ -53,7 +53,7 @@ class Player(pygame.sprite.Sprite):
 
         keys = pygame.key.get_pressed()
         player_x, player_y = 0, 0
-
+        # ходьба
         if keys[pygame.K_w]:
             player_y -= self.speed
             self.KEY = "up"
