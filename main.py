@@ -1,4 +1,5 @@
 import pygame
+from random import uniform
 
 from player import Player, HealthBarPlayer  # Импортируем класс игрока
 from enemy import Enemy, HealthBarEnemy  # Импортируем класс врага
@@ -7,7 +8,9 @@ from bowbar import BowBar  # Импортируем тетиву
 
 def main():
     from begining import But
+    from aid_ammo import Aid
     pygame.init()
+    aids = []
 
     # Настройки окна
     WIDTH, HEIGHT = 650, 650
@@ -21,9 +24,11 @@ def main():
     health_bar_player = HealthBarPlayer(player, 50, 5, player.hp)
     enemy = Enemy(100, 100, player)
     health_bar_enemy = HealthBarEnemy(enemy, 50, 5, 10)
+
     all_sprites.add(player, enemy, bow)
+
     running = True
-    menuning = True
+    menuning = False
     clock = pygame.time.Clock()
 
     menu_sprites = pygame.sprite.Group()
@@ -65,13 +70,22 @@ def main():
             player.speed = 3
             enemy.speed = 1.25
 
+        if player.count == 1000:
+            aid = Aid(uniform(0, 650), uniform(0, 650), "aid.png", all_sprites)
+            all_sprites.add(aid)
+            aids.append(aid)
+            player.count = 0
+
         # Обновление всех спрайтов
         all_sprites.draw(screen)
         health_bar_player.update()
         health_bar_enemy.update()
         all_sprites.update()
 
-        player.collide(health_bar_player, enemy)
+        player.collide(health_bar_player, enemy, aids)
+        for i in aids:
+            i.collide(health_bar_player, player)
+
         health_bar_player.draw(screen)
         health_bar_enemy.draw(screen)
         pygame.display.flip()

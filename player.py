@@ -38,11 +38,13 @@ class Player(pygame.sprite.Sprite):
         self.last_update = pygame.time.get_ticks()
         self.afk_timer = 0
         self.hp = hp
+        self.count = 0
 
-    def collide(self, health_bar_player, enemy):
+    def collide(self, health_bar_player, enemy, aids):
+        self.count += 1
         if self.rect.colliderect(enemy):
-            self.hp -= 1
-            health_bar_player.hp -= 1
+            self.hp -= 3
+            health_bar_player.hp -= 3
         if self.hp <= 0:
             self.kill()
 
