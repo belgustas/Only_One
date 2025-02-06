@@ -9,6 +9,7 @@ from bowbar import BowBar  # Импортируем тетиву
 def main():
     from begining import But
     from aid_ammo import Aid
+    from begining import Begining
     pygame.init()
     aids = []
 
@@ -32,8 +33,9 @@ def main():
     clock = pygame.time.Clock()
 
     menu_sprites = pygame.sprite.Group()
-    again = But(0, 0, 70, "return.png")
-    menu_sprites.add(again)
+    again = But(WIDTH // 2 - 30, HEIGHT // 2 - 60, 70, "return.png")
+    home = But(WIDTH // 2 - 30, HEIGHT // 2 - 150, 70, "home.png")
+    menu_sprites.add(again, home)
 
     while running:
         screen.blit(background, (0, 0))
@@ -60,6 +62,11 @@ def main():
                         menuning = False
                     else:
                         menuning = True
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if menuning:
+                    mouse_x, mouse_y = pygame.mouse.get_pos()
+                    again.clicked(mouse_x, mouse_y, main)
+                    home.clicked(mouse_x, mouse_y, Begining)
 
         if menuning:
             player.speed = 0
