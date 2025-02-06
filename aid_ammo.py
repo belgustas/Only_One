@@ -15,6 +15,9 @@ class Aid(pygame.sprite.Sprite):
         if self.rect.colliderect(player):
             player.hp += 1
             health.hp += 1
+            if player.hp >= 100 and health.hp >= 100:
+                player.hp = 100
+                health.hp = 100
             self.kill()
 
 
