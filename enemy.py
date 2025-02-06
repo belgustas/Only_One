@@ -23,6 +23,7 @@ class Enemy(pygame.sprite.Sprite):
         self.frame_delay = 100
         self.last_update = pygame.time.get_ticks()
         self.current_direction = "down"
+        self.attack_cooldown = 3000
 
     def update(self):
         self.move_towards_player()
@@ -50,6 +51,9 @@ class Enemy(pygame.sprite.Sprite):
             self.frame_index = (self.frame_index + 1) % 9
             self.image = self.animations[self.current_direction][self.frame_index]
             self.last_update = now_tick
+
+    def distance_to_player(self):
+        return abs(self.target.rect.x - self.rect.x) + abs(self.target.rect.y - self.rect.y)
 
 
 class HealthBarEnemy(pygame.sprite.Sprite):

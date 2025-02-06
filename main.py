@@ -89,7 +89,7 @@ def main():
         health_bar_enemy.update()
         all_sprites.update()
 
-        player.collide(health_bar_player, enemy, aids)
+        player.collide(health_bar_player, enemy)
         for i in aids:
             i.collide(health_bar_player, player)
 

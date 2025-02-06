@@ -1,7 +1,6 @@
 import pygame
 import math
 
-
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y, all_sprites, hp):
         super().__init__()
@@ -36,15 +35,20 @@ class Player(pygame.sprite.Sprite):
         self.frame_index = 0
         self.frame_delay = 100
         self.last_update = pygame.time.get_ticks()
+        self.last_update_attack = pygame.time.get_ticks()
         self.afk_timer = 0
         self.hp = hp
         self.count = 0
 
-    def collide(self, health_bar_player, enemy, aids):
+    def collide(self, health_bar_player, enemy):
+        # отчет времени спавна аптечек
+
         self.count += 1
-        if self.rect.colliderect(enemy):
+        current_time = pygame.time.get_ticks()
+        if enemy.distance_to_player() < 25 and current_time - self.last_update_attack > 1000:
             self.hp -= 3
             health_bar_player.hp -= 3
+            self.last_update_attack = current_time
         if self.hp <= 0:
             self.kill()
 
@@ -191,9 +195,6 @@ class HealthBarPlayer(pygame.sprite.Sprite):
         self.max_hp = max_hp
         self.x = self.player.rect.centerx - self.w // 2  # Центрируем по х
         self.y = self.player.rect.top - self.h - 5  # Чуть выше игрока
-
-    def hurt(self):
-        self.hp -= 1
 
     def update(self):
         # координаты игрока
