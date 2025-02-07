@@ -59,7 +59,8 @@ class Enemy(pygame.sprite.Sprite):
             health_bar_enemy.hp -= 10
             bullet.kill()  # Удаляем пулю
             if self.hp_enemy <= 0:
-                self.kill()
+                self.kill()  # Удаляем врага
+                health_bar_enemy.kill()
 
     def distance_to_player(self):
         return abs(self.target.rect.x - self.rect.x) + abs(self.target.rect.y - self.rect.y)
@@ -77,11 +78,14 @@ class HealthBarEnemy(pygame.sprite.Sprite):
         self.y = self.enemy.rect.top - self.h - 5  # Чуть выше игрока
 
     def update(self):
-        # координаты игрока
-        self.x = self.enemy.rect.centerx - self.w // 2
-        self.y = self.enemy.rect.top - self.h - 5
+        if self.enemy.hp_enemy > 0:  # Обновляем только если враг жив
+            self.x = self.enemy.rect.centerx - self.w // 2
+            self.y = self.enemy.rect.top - self.h - 5
+        else:
+            self.kill()
 
     def draw(self, surface):
-        count_hp = self.hp / self.max_hp  # Рассчитываем % здоровья
-        pygame.draw.rect(surface, "red", (self.x, self.y, self.w, self.h))  # Фон (красный)
-        pygame.draw.rect(surface, "green", (self.x, self.y, self.w * count_hp, self.h))  # Текущий хп (зеленый)
+        if self.enemy.hp_enemy > 0:
+            count_hp = self.hp / self.max_hp  # Рассчитываем % здоровья
+            pygame.draw.rect(surface, "red", (self.x, self.y, self.w, self.h))  # Фон (красный)
+            pygame.draw.rect(surface, "green", (self.x, self.y, self.w * count_hp, self.h))  # Текущий хп (зеленый)

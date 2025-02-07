@@ -43,15 +43,15 @@ class Player(pygame.sprite.Sprite):
 
     def collide(self, health_bar_player, enemy):
         # отчет времени спавна аптечек
-
-        self.count += 1
-        current_time = pygame.time.get_ticks()
-        if enemy.distance_to_player() < 25 and current_time - self.last_update_attack > 1000:
-            self.hp -= 3
-            health_bar_player.hp -= 3
-            self.last_update_attack = current_time
-        if self.hp <= 0:
-            self.kill()
+        if enemy.hp_enemy > 0:
+            self.count += 1
+            current_time = pygame.time.get_ticks()
+            if enemy.distance_to_player() < 25 and current_time - self.last_update_attack > 1000:
+                self.hp -= 3
+                health_bar_player.hp -= 3
+                self.last_update_attack = current_time
+            if self.hp <= 0:
+                self.kill()
 
     def update(self):
         self.run()
