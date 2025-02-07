@@ -2,7 +2,7 @@ import pygame
 
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, x, y, target):
+    def __init__(self, x, y, target, hp):
         super().__init__()
         self.sprite_sheet = pygame.image.load("img/Enemy.png").convert_alpha()
         self.ROWS = {"up": 8, "down": 10, "left": 9, "right": 11}
@@ -23,7 +23,7 @@ class Enemy(pygame.sprite.Sprite):
         self.frame_delay = 100
         self.last_update = pygame.time.get_ticks()
         self.current_direction = "down"
-        self.attack_cooldown = 3000
+        self.hp_enemy = hp
 
     def update(self):
         self.move_towards_player()
@@ -51,6 +51,13 @@ class Enemy(pygame.sprite.Sprite):
             self.frame_index = (self.frame_index + 1) % 9
             self.image = self.animations[self.current_direction][self.frame_index]
             self.last_update = now_tick
+
+    def collide_with_bullet(self, bullet):
+        if self.rect.colliderect(bullet.rect):  # Проверяем пересечение с пулей
+            self.hp_enemy -= 10  # Уменьшаем HP врага
+            bullet.kill()  # Удаляем пулю
+            if self.hp_enemy <= 0:
+                self.kill()  # Удаляем врага, если хп кончилось
 
     def distance_to_player(self):
         return abs(self.target.rect.x - self.rect.x) + abs(self.target.rect.y - self.rect.y)

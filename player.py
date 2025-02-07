@@ -1,6 +1,7 @@
 import pygame
 import math
 
+
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y, all_sprites, hp):
         super().__init__()
@@ -147,7 +148,6 @@ class Player(pygame.sprite.Sprite):
     def check_afk(self):
         if not self.is_moving and pygame.time.get_ticks() - self.afk_timer > 10000:
             self.image = self.stop_cadr  # Если прошло 10 секунд без движения — ставим AFK-кадр
-
 
 
 class Bullet(pygame.sprite.Sprite):

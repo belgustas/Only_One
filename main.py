@@ -1,7 +1,7 @@
 import pygame
 from random import uniform
 
-from player import Player, HealthBarPlayer  # Импортируем класс игрока
+from player import Player, HealthBarPlayer, Bullet  # Импортируем класс игрока
 from enemy import Enemy, HealthBarEnemy  # Импортируем класс врага
 from bowbar import BowBar  # Импортируем тетиву
 
@@ -18,12 +18,13 @@ def main():
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Only one!")
     background = pygame.image.load("img/arena_img.png").convert()
+
     # Создание группы спрайтов
     all_sprites = pygame.sprite.Group()
     bow = BowBar(0)
     player = Player(WIDTH // 2, HEIGHT // 2, all_sprites, 100)
     health_bar_player = HealthBarPlayer(player, 50, 5, player.hp)
-    enemy = Enemy(100, 100, player)
+    enemy = Enemy(100, 100, player, 100)
     health_bar_enemy = HealthBarEnemy(enemy, 50, 5, 10)
 
     all_sprites.add(player, enemy, bow)
@@ -32,13 +33,20 @@ def main():
     menuning = False
     clock = pygame.time.Clock()
 
+    # меню
     menu_sprites = pygame.sprite.Group()
     again = But(WIDTH // 2 - 30, HEIGHT // 2 - 60, 70, "return.png")
     home = But(WIDTH // 2 - 30, HEIGHT // 2 - 150, 70, "home.png")
     menu_sprites.add(again, home)
 
+    # музыка
+    battle_music = pygame.mixer.Sound("sounds/battle_music.mp3")
+    battle_music.set_volume(0.3)
+
     while running:
+        # запускаем музыку
         screen.blit(background, (0, 0))
+        battle_music.play(-1)
 
         # Обработчик событий
         for event in pygame.event.get():
@@ -83,13 +91,21 @@ def main():
             aids.append(aid)
             player.count = 0
 
+        if enemy.hp_enemy <= 0:
+            enemy.kill()
+            health_bar_enemy.kill()
+
         # Обновление всех спрайтов
+        for bullet in [sprite for sprite in all_sprites if isinstance(sprite, Bullet)]:
+            enemy.collide_with_bullet(bullet)
+
         all_sprites.draw(screen)
         health_bar_player.update()
         health_bar_enemy.update()
         all_sprites.update()
 
         player.collide(health_bar_player, enemy)
+
         for i in aids:
             i.collide(health_bar_player, player)
 

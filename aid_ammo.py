@@ -2,6 +2,7 @@ import pygame
 from begining import load_image
 from random import uniform
 
+
 class Aid(pygame.sprite.Sprite):
     def __init__(self, WIDTH, HEIGHT, name, all_sprites):
         pygame.sprite.Sprite.__init__(self)

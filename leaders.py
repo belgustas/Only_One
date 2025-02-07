@@ -2,7 +2,6 @@ import pygame
 import sqlite3
 
 
-
 def leaders():
     from begining import Begining
     from begining import But
@@ -36,7 +35,6 @@ def leaders():
         screen.blit(string_rendered, intro_rect)
 
     while running:
-
 
         # Обработчик событий
         for event in pygame.event.get():

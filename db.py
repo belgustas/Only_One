@@ -4,6 +4,7 @@ con = sqlite3.connect('pygame_top')
 
 cur = con.cursor()
 
+
 def leadtable():
     number = cur.execute("""SELECT id FROM top_list""").fetchall()
 
