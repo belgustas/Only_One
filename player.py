@@ -156,6 +156,7 @@ class Bullet(pygame.sprite.Sprite):
 
         self.image = pygame.image.load("img/bullet_img.png").convert_alpha()
         self.rect = self.image.get_rect(center=(player_x, player_y))
+        self.mask = pygame.mask.from_surface(self.image)  # Создаем маску для пули
 
         # Вычисляем направление пули
         now_x, now_y = mouse_x - player_x, mouse_y - player_y

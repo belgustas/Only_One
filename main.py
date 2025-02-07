@@ -25,7 +25,7 @@ def main():
     player = Player(WIDTH // 2, HEIGHT // 2, all_sprites, 100)
     health_bar_player = HealthBarPlayer(player, 50, 5, player.hp)
     enemy = Enemy(100, 100, player, 100)
-    health_bar_enemy = HealthBarEnemy(enemy, 50, 5, 10)
+    health_bar_enemy = HealthBarEnemy(enemy, 50, 5, 100)
 
     all_sprites.add(player, enemy, bow)
 
@@ -97,7 +97,8 @@ def main():
 
         # Обновление всех спрайтов
         for bullet in [sprite for sprite in all_sprites if isinstance(sprite, Bullet)]:
-            enemy.collide_with_bullet(bullet)
+            for enemy in [sprite for sprite in all_sprites if isinstance(sprite, Enemy)]:
+                enemy.collide_with_bullet(bullet, health_bar_enemy)
 
         all_sprites.draw(screen)
         health_bar_player.update()

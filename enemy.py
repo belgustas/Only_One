@@ -16,6 +16,7 @@ class Enemy(pygame.sprite.Sprite):
 
         self.image = self.animations["down"][0]  # Начальный спрайт
         self.rect = self.image.get_rect(center=(x, y))
+        self.mask = pygame.mask.from_surface(self.image)  # Создаем маску для врага
 
         self.target = target  # бегать за целью
         self.speed = 1.25  # Скорость врага
@@ -52,12 +53,13 @@ class Enemy(pygame.sprite.Sprite):
             self.image = self.animations[self.current_direction][self.frame_index]
             self.last_update = now_tick
 
-    def collide_with_bullet(self, bullet):
-        if self.rect.colliderect(bullet.rect):  # Проверяем пересечение с пулей
-            self.hp_enemy -= 10  # Уменьшаем HP врага
+    def collide_with_bullet(self, bullet, health_bar_enemy):
+        if pygame.sprite.collide_mask(self, bullet):  # Проверяем столкновение по маскам
+            self.hp_enemy -= 10
+            health_bar_enemy.hp -= 10
             bullet.kill()  # Удаляем пулю
             if self.hp_enemy <= 0:
-                self.kill()  # Удаляем врага, если хп кончилось
+                self.kill()
 
     def distance_to_player(self):
         return abs(self.target.rect.x - self.rect.x) + abs(self.target.rect.y - self.rect.y)
