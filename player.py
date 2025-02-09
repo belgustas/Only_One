@@ -3,10 +3,13 @@ import math
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y, all_sprites, hp, name):
+    def __init__(self, x, y, all_sprites, hp, name, battle_music, sound_enabled):
         super().__init__()
         self.all_sprites = all_sprites
+        # музыка
 
+        self.battle_music = battle_music
+        self.sound_enabled = sound_enabled
         self.sprite_sheet = pygame.image.load("img/Player.png").convert_alpha()
 
         # Ряды в спрайтшите для анимации
@@ -61,13 +64,13 @@ class Player(pygame.sprite.Sprite):
             if self.hp <= 0:
                 self.kill()
                 change(self.name, self.point)
-                Ending()
-
+                Ending(self.battle_music, self.sound_enabled, self.name, self.point)
 
     def update(self):
         self.run()
         self.animation()
         self.check_afk()
+        self.check_win(self.point)
 
     def run(self):
         if self.is_shooting:  # Если игрок стреляет, он не должен двигаться
@@ -159,6 +162,13 @@ class Player(pygame.sprite.Sprite):
     def check_afk(self):
         if not self.is_moving and pygame.time.get_ticks() - self.afk_timer > 10000:
             self.image = self.stop_cadr  # Если прошло 10 секунд без движения — ставим AFK-кадр
+
+    def check_win(self, point):
+        from ending_win import Ending_win
+
+        # сообщаем об выиграше
+        if point > 11:
+            Ending_win(self.battle_music, self.sound_enabled, self.name, self.point)
 
 
 class Bullet(pygame.sprite.Sprite):

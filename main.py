@@ -22,7 +22,7 @@ def main(battle_music, sound_enabled, name):  # главная функция
 
     all_sprites = pygame.sprite.Group()
     bow = BowBar(0)
-    player = Player(WIDTH // 2, HEIGHT // 2, all_sprites, 100, name)
+    player = Player(WIDTH // 2, HEIGHT // 2, all_sprites, 100, name, battle_music, sound_enabled)
     health_bar_player = HealthBarPlayer(player, 50, 5, player.hp)
 
     all_sprites.add(player, bow)
@@ -65,7 +65,7 @@ def main(battle_music, sound_enabled, name):  # главная функция
                     again.changes(mouse_x, mouse_y, lambda: main(battle_music, sound_enabled, name), name, player.point)
                     home.changes(mouse_x, mouse_y, lambda: Begining(battle_music, sound_enabled), name, player.point)
 
-        if player.counte == 500:
+        if player.counte == 100:
             enemy = Enemy(uniform(0, WIDTH), uniform(0, HEIGHT), player, 100)
             health_bar_enemy = HealthBarEnemy(enemy, 50, 5, 100)
             all_sprites.add(enemy)
