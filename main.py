@@ -38,8 +38,8 @@ def main():
 
     # меню
     menu_sprites = pygame.sprite.Group()
-    again = But(WIDTH // 2 - 30, HEIGHT // 2 - 60, 70, "return.png")
-    home = But(WIDTH // 2 - 30, HEIGHT // 2 - 150, 70, "home.png")
+    again = But(WIDTH // 2 - 30, HEIGHT // 2 - 60, 70, "img/return.png")
+    home = But(WIDTH // 2 - 30, HEIGHT // 2 - 150, 70, "img/home.png")
     menu_sprites.add(again, home)
 
     # музыка
@@ -91,7 +91,7 @@ def main():
             enemy.speed = 1.25
 
         if player.count == 1000:
-            aid = Aid(uniform(0, 650), uniform(0, 650), "aid.png", all_sprites)
+            aid = Aid(uniform(0, 650), uniform(0, 650), "img/aid.png", all_sprites)
             all_sprites.add(aid)
             aids.append(aid)
             player.count = 0

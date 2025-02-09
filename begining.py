@@ -74,4 +74,5 @@ def Begining():
     pygame.quit()
 
 
-Begining()
+if __name__ == "__main__":
+    Begining()
