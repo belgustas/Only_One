@@ -3,9 +3,13 @@ import math
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y, all_sprites, hp, name):
+    def __init__(self, x, y, all_sprites, hp, name, damage, battle_music, sound_enabled):
         super().__init__()
         self.all_sprites = all_sprites
+        # музыка
+
+        self.battle_music = battle_music
+        self.sound_enabled = sound_enabled
 
         self.sprite_sheet = pygame.image.load("img/Player.png").convert_alpha()
 
@@ -43,6 +47,7 @@ class Player(pygame.sprite.Sprite):
         self.counte = 0
         self.point = 0
         self.name = name
+        self.damage = damage
 
     def counter(self):
         self.counte += 1
@@ -55,19 +60,20 @@ class Player(pygame.sprite.Sprite):
         if enemy.hp_enemy > 0:
             current_time = pygame.time.get_ticks()
             if enemy.distance_to_player() < 25 and current_time - self.last_update_attack > 1000:
-                self.hp -= 10
-                health_bar_player.hp -= 10
+                self.hp -= self.damage
+                health_bar_player.hp -= self.damage
                 self.last_update_attack = current_time
             if self.hp <= 0:
                 self.kill()
                 change(self.name, self.point)
-                Ending()
+                Ending(self.battle_music, self.sound_enabled, self.name, self.point)
 
 
     def update(self):
         self.run()
         self.animation()
         self.check_afk()
+        self.check_win(self.point)
 
     def run(self):
         if self.is_shooting:  # Если игрок стреляет, он не должен двигаться
@@ -110,6 +116,12 @@ class Player(pygame.sprite.Sprite):
 
         if self.is_moving:
             self.afk_timer = pygame.time.get_ticks()
+
+    def check_win(self, point):
+        from ending_win import Ending_win
+        # сообщаем об выиграше
+        if point > 11:
+            Ending_win(self.battle_music, self.sound_enabled, self.name, self.point)
 
     def shoot(self, mouse_x, mouse_y):
         if self.is_shooting:  # Нельзя стрелять, пока не завершилась анимация предыдущего выстрела

@@ -22,7 +22,7 @@ def main(battle_music, sound_enabled, name):  # главная функция
 
     all_sprites = pygame.sprite.Group()
     bow = BowBar(0)
-    player = Player(WIDTH // 2, HEIGHT // 2, all_sprites, 100, name)
+    player = Player(WIDTH // 2, HEIGHT // 2, all_sprites, 100, name, 10, battle_music, sound_enabled)
     health_bar_player = HealthBarPlayer(player, 50, 5, player.hp)
 
     all_sprites.add(player, bow)

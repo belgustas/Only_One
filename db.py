@@ -35,7 +35,11 @@ def input(name):
 
 def change(name, score):
     # Обновляем результат игрока, если новый результат лучше
-    current_score = cur.execute("""SELECT top_res FROM top_list WHERE name = ?""", (name,)).fetchone()[0]
-    if score >= current_score:
-        cur.execute("""UPDATE top_list SET top_res = ? WHERE name = ?""", (score, name))
-        con.commit()
+    current_score = cur.execute("""SELECT top_res FROM top_list WHERE name = ?""", (name,)).fetchone()
+    if current_score is None:
+        current_score = 0
+    else:
+        current_score = cur.execute("""SELECT top_res FROM top_list WHERE name = ?""", (name,)).fetchone()[0]
+        if score >= current_score:
+            cur.execute("""UPDATE top_list SET top_res = ? WHERE name = ?""", (score, name))
+            con.commit()

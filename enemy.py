@@ -55,13 +55,14 @@ class Enemy(pygame.sprite.Sprite):
 
     def collide_with_bullet(self, bullet, health_bar_enemy, player):
         if pygame.sprite.collide_mask(self, bullet):  # Проверяем столкновение по маскам
-            self.hp_enemy -= 10
-            health_bar_enemy.hp -= 10
+            self.hp_enemy -= 100
+            health_bar_enemy.hp -= 100
             bullet.kill()  # Удаляем пулю
             if self.hp_enemy <= 0:
                 self.kill()  # Удаляем врага
                 health_bar_enemy.kill()
                 player.point += 1
+                self.rect.x = 1000
 
     def distance_to_player(self):
         return abs(self.target.rect.x - self.rect.x) + abs(self.target.rect.y - self.rect.y)
