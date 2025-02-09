@@ -6,7 +6,7 @@ from enemy import Enemy, HealthBarEnemy
 from bowbar import BowBar
 
 
-def main(battle_music, sound_enabled):  # главная функция
+def main(battle_music, sound_enabled, name):  # главная функция
     from begining import But
     from aid_ammo import Aid
     from begining import Begining
@@ -22,7 +22,7 @@ def main(battle_music, sound_enabled):  # главная функция
 
     all_sprites = pygame.sprite.Group()
     bow = BowBar(0)
-    player = Player(WIDTH // 2, HEIGHT // 2, all_sprites, 100)
+    player = Player(WIDTH // 2, HEIGHT // 2, all_sprites, 100, name)
     health_bar_player = HealthBarPlayer(player, 50, 5, player.hp)
 
     all_sprites.add(player, bow)

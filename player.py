@@ -3,7 +3,7 @@ import math
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y, all_sprites, hp):
+    def __init__(self, x, y, all_sprites, hp, name):
         super().__init__()
         self.all_sprites = all_sprites
 
@@ -42,12 +42,14 @@ class Player(pygame.sprite.Sprite):
         self.count = 0
         self.counte = 0
         self.point = 0
+        self.name = name
 
     def counter(self):
         self.counte += 1
         self.count += 1
 
     def collide(self, health_bar_player, enemy):
+        from db import change
         # отчет времени спавна аптечек
         if enemy.hp_enemy > 0:
             current_time = pygame.time.get_ticks()
@@ -57,6 +59,8 @@ class Player(pygame.sprite.Sprite):
                 self.last_update_attack = current_time
             if self.hp <= 0:
                 self.kill()
+                change(self.name, self.point)
+
 
     def update(self):
         self.run()
