@@ -3,16 +3,13 @@ import pygame
 
 def Auto(battle_music=None, sound_enabled=True):
     from main import main
-    from leaders import leaders
-    from settings import Settings
-    from begining import But
     from db import input
     pygame.init()
     font = pygame.font.Font(None, 30)
 
     WIDTH, HEIGHT = 650, 650
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption("Auto")
+    pygame.display.set_caption("img/Auto")
     background = pygame.image.load("img/backgroundfor.jpg").convert()
     background = pygame.transform.scale(background, (750, 750))
     all_sprites = pygame.sprite.Group()
@@ -34,9 +31,10 @@ def Auto(battle_music=None, sound_enabled=True):
             if need_inp and event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     input(input_text)
+                    print(input_text)
                     main(battle_music, sound_enabled, input_text)
                 elif event.key == pygame.K_BACKSPACE:
-                    pass
+                    input_text = input_text[:-1]
                 else:
                     input_text += event.unicode
 

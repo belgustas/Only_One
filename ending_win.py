@@ -9,15 +9,15 @@ def Ending():
     WIDTH, HEIGHT = 650, 650
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Ending")
-    background = pygame.image.load("background.jpg").convert()
+    background = pygame.image.load("img/background.jpg").convert()
     background = pygame.transform.scale(background, (750, 750))
     all_sprites = pygame.sprite.Group()
 
     running = True
     clock = pygame.time.Clock()
-    but1 = But(0, 0, 70, "return.png")
-    but2 = But(WIDTH, HEIGHT, 70, "onemoretime.png")
-    but3 = But(WIDTH, HEIGHT, 70, "next.png")
+    but1 = But(0, 0, 70, "img/return.png")
+    but2 = But(WIDTH, HEIGHT, 70, "img/onemoretime.png")
+    but3 = But(WIDTH, HEIGHT, 70, "img/next.png")
     all_sprites.add(but1, but2, but3)
 
     intro_text = ["YOU WIN"]
