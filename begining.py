@@ -27,6 +27,7 @@ class But(pygame.sprite.Sprite):
 
 
 def Begining(battle_music=None, sound_enabled=True):
+    from Auto import Auto
     from main import main
     from leaders import leaders
     from settings import Settings
@@ -55,7 +56,7 @@ def Begining(battle_music=None, sound_enabled=True):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
                 but1.clicked(mouse_x, mouse_y, lambda: Settings(battle_music, sound_enabled))
-                but2.clicked(mouse_x, mouse_y, lambda: main(battle_music, sound_enabled))
+                but2.clicked(mouse_x, mouse_y, lambda: Auto())
                 but3.clicked(mouse_x, mouse_y, lambda: leaders(battle_music, sound_enabled))
 
         all_sprites.update()
