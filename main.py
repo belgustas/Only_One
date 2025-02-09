@@ -25,12 +25,11 @@ def main():
     bow = BowBar(0)
     player = Player(WIDTH // 2, HEIGHT // 2, all_sprites, 100)
     health_bar_player = HealthBarPlayer(player, 50, 5, player.hp)
-    enemy = Enemy(uniform(0, WIDTH), uniform(0, HEIGHT), player, 100)
-    health_bar_enemy = HealthBarEnemy(enemy, 50, 5, 100)
 
 
 
-    all_sprites.add(player, enemy, bow)
+
+    all_sprites.add(player, bow)
 
     running = True
     menuning = False
@@ -38,8 +37,8 @@ def main():
 
     # меню
     menu_sprites = pygame.sprite.Group()
-    again = But(WIDTH // 2 - 30, HEIGHT // 2 - 60, 70, "img/return.png")
-    home = But(WIDTH // 2 - 30, HEIGHT // 2 - 150, 70, "img/home.png")
+    again = But(WIDTH // 2 - 30, HEIGHT // 2 - 60, 70, "return.png")
+    home = But(WIDTH // 2 - 30, HEIGHT // 2 - 150, 70, "home.png")
     menu_sprites.add(again, home)
 
     # музыка
@@ -81,47 +80,69 @@ def main():
                     again.clicked(mouse_x, mouse_y, main)
                     home.clicked(mouse_x, mouse_y, Begining)
 
+        if player.counte == 500:
+            enemy = enemy = Enemy(uniform(0, WIDTH), uniform(0, HEIGHT), player, 100)
+            health_bar_enemy = HealthBarEnemy(enemy, 50, 5, 100)
+            all_sprites.add(enemy)
+            enemys.append(enemy)
+            bars.append(health_bar_enemy)
+            player.counte = 0
+
         if menuning:
             player.speed = 0
-            enemy.speed = 0
+            for enemy in enemys:
+                enemy.speed = 0
             menu_sprites.draw(screen)
             menu_sprites.update()
         else:
             player.speed = 3
-            enemy.speed = 1.25
+            for enemy in enemys:
+                enemy.speed = 1.25
 
         if player.count == 1000:
-            aid = Aid(uniform(0, 650), uniform(0, 650), "img/aid.png", all_sprites)
+            aid = Aid(uniform(0, 650), uniform(0, 650), "aid.png", all_sprites)
             all_sprites.add(aid)
             aids.append(aid)
             player.count = 0
 
-        if enemy.hp_enemy <= 0:
-            enemy.kill()
-            health_bar_enemy.kill()
+
+
+
 
         # Обновление всех спрайтов
-        for bullet in [sprite for sprite in all_sprites if isinstance(sprite, Bullet)]:
-            for enemy in [sprite for sprite in all_sprites if isinstance(sprite, Enemy)]:
-                enemy.collide_with_bullet(bullet, health_bar_enemy, player)
+        for enemy, health_bar_enemy in zip(enemys, bars):
+            for bullet in [sprite for sprite in all_sprites if isinstance(sprite, Bullet)]:
+                for enemy in [sprite for sprite in all_sprites if isinstance(sprite, Enemy)]:
+                    enemy.collide_with_bullet(bullet, health_bar_enemy, player)
 
         all_sprites.draw(screen)
         health_bar_player.update()
-        health_bar_enemy.update()
+        for health_bar_enemy in bars:
+            health_bar_enemy.update()
+
         all_sprites.update()
 
-        player.collide(health_bar_player, enemy)
         for i in aids:
             i.collide(health_bar_player, player)
 
+        for enemy, health_bar_enemy in zip(enemys, bars):
+            if enemy.hp_enemy <= 0:
+                enemy.kill()
+                health_bar_enemy.kill()
+            player.collide(health_bar_enemy, enemy)
+            print(player.count)
+
+        player.counter()
         string_rendered = font.render(f"Points:{player.point}", 1, pygame.Color('Red'))
         intro_rect = string_rendered.get_rect()
         intro_rect.x = 550
         intro_rect.y = 25
         screen.blit(string_rendered, intro_rect)
-
+        print(player.counte, player.count)
         health_bar_player.draw(screen)
-        health_bar_enemy.draw(screen)
+        for health_bar_enemy in bars:
+            health_bar_enemy.draw(screen)
+
         pygame.display.flip()
         clock.tick(60)  # FPS
 
