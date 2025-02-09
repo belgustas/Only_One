@@ -1,5 +1,5 @@
 import pygame
-import sys
+import sys # импорт
 import os
 
 from db import change
