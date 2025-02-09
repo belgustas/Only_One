@@ -1,12 +1,12 @@
 import pygame
 from random import uniform
 
-from player import Player, HealthBarPlayer, Bullet  # Импортируем класс игрока
-from enemy import Enemy, HealthBarEnemy  # Импортируем класс врага
-from bowbar import BowBar  # Импортируем тетиву
+from player import Player, HealthBarPlayer, Bullet
+from enemy import Enemy, HealthBarEnemy
+from bowbar import BowBar
 
 
-def main():
+def main(battle_music, sound_enabled):  # главная функция
     from begining import But
     from aid_ammo import Aid
     from begining import Begining
@@ -14,20 +14,16 @@ def main():
     aids = []
     enemys = []
     bars = []
-    # Настройки окна
+
     WIDTH, HEIGHT = 650, 650
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Only one!")
     background = pygame.image.load("img/arena_img.png").convert()
 
-    # Создание группы спрайтов
     all_sprites = pygame.sprite.Group()
     bow = BowBar(0)
     player = Player(WIDTH // 2, HEIGHT // 2, all_sprites, 100)
     health_bar_player = HealthBarPlayer(player, 50, 5, player.hp)
-
-
-
 
     all_sprites.add(player, bow)
 
@@ -35,24 +31,17 @@ def main():
     menuning = False
     clock = pygame.time.Clock()
 
-    # меню
     menu_sprites = pygame.sprite.Group()
-    again = But(WIDTH // 2 - 30, HEIGHT // 2 - 60, 70, "return.png")
-    home = But(WIDTH // 2 - 30, HEIGHT // 2 - 150, 70, "home.png")
+    again = But(WIDTH // 2 - 30, HEIGHT // 2 - 60, 70, "img/return.png")
+    home = But(WIDTH // 2 - 30, HEIGHT // 2 - 150, 70, "img/home.png")
     menu_sprites.add(again, home)
-
-    # музыка
-    battle_music = pygame.mixer.Sound("sounds/battle_music.mp3")
-    battle_music.set_volume(0.3)
 
     font = pygame.font.Font(None, 30)
 
     while running:
-        # запускаем музыку
         screen.blit(background, (0, 0))
-        battle_music.play(-1)
 
-        # Обработчик событий
+        # обработка событий
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -63,25 +52,21 @@ def main():
                         mouse_x, mouse_y = pygame.mouse.get_pos()
                         player.shoot(mouse_x, mouse_y)
                     bow.count = 0
-                    print(health_bar_player.hp)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     bow.update()
                     bow.count = 1
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    if menuning:
-                        menuning = False
-                    else:
-                        menuning = True
+                    menuning = not menuning
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if menuning:
                     mouse_x, mouse_y = pygame.mouse.get_pos()
-                    again.clicked(mouse_x, mouse_y, main)
-                    home.clicked(mouse_x, mouse_y, Begining)
+                    again.clicked(mouse_x, mouse_y, lambda: main(battle_music, sound_enabled))
+                    home.clicked(mouse_x, mouse_y, lambda: Begining(battle_music, sound_enabled))
 
         if player.counte == 500:
-            enemy = enemy = Enemy(uniform(0, WIDTH), uniform(0, HEIGHT), player, 100)
+            enemy = Enemy(uniform(0, WIDTH), uniform(0, HEIGHT), player, 100)
             health_bar_enemy = HealthBarEnemy(enemy, 50, 5, 100)
             all_sprites.add(enemy)
             enemys.append(enemy)
@@ -100,26 +85,20 @@ def main():
                 enemy.speed = 1.25
 
         if player.count == 1000:
-            aid = Aid(uniform(0, 650), uniform(0, 650), "aid.png", all_sprites)
+            aid = Aid(uniform(0, 650), uniform(0, 650), "img/aid.png", all_sprites)
             all_sprites.add(aid)
             aids.append(aid)
             player.count = 0
 
-
-
-
-
         # Обновление всех спрайтов
         for enemy, health_bar_enemy in zip(enemys, bars):
             for bullet in [sprite for sprite in all_sprites if isinstance(sprite, Bullet)]:
-                for enemy in [sprite for sprite in all_sprites if isinstance(sprite, Enemy)]:
-                    enemy.collide_with_bullet(bullet, health_bar_enemy, player)
+                enemy.collide_with_bullet(bullet, health_bar_enemy, player)
 
         all_sprites.draw(screen)
         health_bar_player.update()
         for health_bar_enemy in bars:
             health_bar_enemy.update()
-
         all_sprites.update()
 
         for i in aids:
@@ -130,20 +109,16 @@ def main():
                 enemy.kill()
                 health_bar_enemy.kill()
             player.collide(health_bar_enemy, enemy)
-            print(player.count)
 
         player.counter()
-        string_rendered = font.render(f"Points:{player.point}", 1, pygame.Color('Red'))
-        intro_rect = string_rendered.get_rect()
-        intro_rect.x = 550
-        intro_rect.y = 25
-        screen.blit(string_rendered, intro_rect)
+        screen.blit(font.render(f"Points:{player.point}", 1, pygame.Color('Red')), (550, 25))
+
         print(player.counte, player.count)
         health_bar_player.draw(screen)
         for health_bar_enemy in bars:
             health_bar_enemy.draw(screen)
 
         pygame.display.flip()
-        clock.tick(60)  # FPS
+        clock.tick(60)
 
     pygame.quit()

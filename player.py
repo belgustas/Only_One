@@ -46,6 +46,7 @@ class Player(pygame.sprite.Sprite):
     def counter(self):
         self.counte += 1
         self.count += 1
+
     def collide(self, health_bar_player, enemy):
         # отчет времени спавна аптечек
         if enemy.hp_enemy > 0:

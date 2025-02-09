@@ -1,11 +1,10 @@
 import pygame
 import sys
-import os # импорты
+import os
 
 
 def load_image(name, colorkey=None):
     fullname = os.path.join(name)
-    # если файл не существует, то выходим
     if not os.path.isfile(fullname):
         print(f"Файл с изображением '{fullname}' не найден")
         sys.exit()
@@ -23,12 +22,11 @@ class But(pygame.sprite.Sprite):
         self.low = low
 
     def clicked(self, x, y, func):
-        if ((x >= self.rect.x) and (x <= self.rect.x + self.low)) and (
-                (y >= self.rect.y) and (y <= self.rect.y + self.low)):
+        if self.rect.collidepoint(x, y):
             func()
 
 
-def Begining():
+def Begining(battle_music=None, sound_enabled=True):
     from main import main
     from leaders import leaders
     from settings import Settings
@@ -51,28 +49,27 @@ def Begining():
     while running:
         screen.blit(background, (-50, -50))
 
-        # Обработчик событий
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
-                but1.clicked(mouse_x, mouse_y, Settings)
-                but2.clicked(mouse_x, mouse_y, main)
-                but3.clicked(mouse_x, mouse_y, leaders)
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    running = False
+                but1.clicked(mouse_x, mouse_y, lambda: Settings(battle_music, sound_enabled))
+                but2.clicked(mouse_x, mouse_y, lambda: main(battle_music, sound_enabled))
+                but3.clicked(mouse_x, mouse_y, lambda: leaders(battle_music, sound_enabled))
 
         all_sprites.update()
         all_sprites.draw(screen)
 
         pygame.display.flip()
-        clock.tick(60)  # FPS
+        clock.tick(60)
 
     pygame.quit()
 
 
 if __name__ == "__main__":
-    Begining()
+    pygame.init()
+    battle_music = pygame.mixer.Sound("sounds/battle_music.mp3")
+    battle_music.set_volume(0.3)
+    battle_music.play(-1)
+    Begining(battle_music, True)

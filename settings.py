@@ -1,7 +1,7 @@
 import pygame
 
 
-def Settings(battle_music):  # Принимаем объект музыки как аргумент
+def Settings(battle_music, sound_enabled):
     from begining import Begining
     from begining import But
 
@@ -14,46 +14,36 @@ def Settings(battle_music):  # Принимаем объект музыки ка
     background = pygame.transform.scale(background, (750, 750))
     all_sprites = pygame.sprite.Group()
 
-    # Переменная для управления звуком
-    sound_enabled = True
+    but1 = But(0, 0, 70, "img/return.png")
+    sound_button = But(WIDTH // 2 - 50, HEIGHT // 2 - 65, 100, "img/check_button.png")
+    all_sprites.add(but1, sound_button)
 
     running = True
     clock = pygame.time.Clock()
-
-    # Кнопка возврата
-    but1 = But(0, 0, 70, "img/return.png")
-    # Кнопка для включения/выключения звука
-    sound_button = But(WIDTH // 2 - 100, HEIGHT // 2 - 65, 100, "img/check_button.png")
-    all_sprites.add(but1, sound_button)
+    font = pygame.font.Font(None, 36)  # Шрифт для текста
 
     while running:
         screen.blit(background, (-50, -50))
 
-        # Обработчик событий
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
-                but1.clicked(mouse_x, mouse_y, lambda: Begining(battle_music))  # Передаём музыку в Begining
-                # Проверка нажатия на кнопку звука
+                but1.clicked(mouse_x, mouse_y, lambda: Begining(battle_music, sound_enabled))
                 if sound_button.rect.collidepoint(mouse_x, mouse_y):
-                    sound_enabled = not sound_enabled  # Переключаем состояние звука
-                    if sound_enabled:
-                        battle_music.set_volume(0.3)  # Включаем звук
-                    else:
-                        battle_music.set_volume(0)  # Выключаем звук
+                    sound_enabled = not sound_enabled
+                    battle_music.set_volume(0.3 if sound_enabled else 0)
 
         all_sprites.update()
         all_sprites.draw(screen)
 
-        # Отображение состояния звука на экране
-        font = pygame.font.Font(None, 36)
+        # Отображение состояния звука
         sound_status = "Sound: ON" if sound_enabled else "Sound: OFF"
         text = font.render(sound_status, True, (255, 255, 255))
-        screen.blit(text, (WIDTH // 2 - 100, HEIGHT // 2 + 50))
+        screen.blit(text, (WIDTH // 2 - 60, HEIGHT // 2 + 50))  # Размещаем текст чуть ниже кнопки
 
         pygame.display.flip()
-        clock.tick(60)  # FPS
+        clock.tick(60)
 
     pygame.quit()
