@@ -62,7 +62,7 @@ def main(battle_music, sound_enabled, name):  # главная функция
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if menuning:
                     mouse_x, mouse_y = pygame.mouse.get_pos()
-                    again.clicked(mouse_x, mouse_y, lambda: main(battle_music, sound_enabled))
+                    again.clicked(mouse_x, mouse_y, lambda: main(battle_music, sound_enabled, name))
                     home.clicked(mouse_x, mouse_y, lambda: Begining(battle_music, sound_enabled))
 
         if player.counte == 500:

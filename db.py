@@ -5,6 +5,7 @@ con = sqlite3.connect('pygame_top.sqlite3')
 cur = con.cursor()
 
 
+
 def leadtable():
     nickname = cur.execute("""SELECT name FROM top_list""").fetchall()
 
@@ -18,7 +19,14 @@ def leadtable():
     return table_leaders
 
 def input(name):
-    cur.execute("""INSERT INTO top_list VALUES (?, ?)""", (name, 0))
+    count = 0
+    nickname = list(cur.execute("""SELECT name FROM top_list""").fetchall())
+    print(nickname)
+    for i in nickname:
+        if name in i:
+            count = 1
+    if count != 1:
+        cur.execute("""INSERT INTO top_list VALUES (?, ?)""", (name, 0))
 
 def change(name, score):
     cur.execute("""UPDATE top_list SET top_res = ? WHERE name = ?""", (score, name))
