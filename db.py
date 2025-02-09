@@ -21,7 +21,7 @@ def leadtable():
 
 
 def input(name):
-    # Проверяем, существует ли игрок с таким именем
+    # Проверяем, существует ли игрок
     count = 0
     nickname = list(cur.execute("""SELECT name FROM top_list""").fetchall())
     for i in nickname:
