@@ -39,7 +39,7 @@ def Begining(battle_music=None, sound_enabled=True):
     from leaders import leaders
     from settings import Settings
     pygame.init()
-
+    # привет)
     WIDTH, HEIGHT = 650, 650
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Begining")
