@@ -9,14 +9,14 @@ def Ending():
     WIDTH, HEIGHT = 650, 650
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Ending")
-    background = pygame.image.load("background.jpg").convert()
+    background = pygame.image.load("img/background.jpg").convert()
     background = pygame.transform.scale(background, (750, 750))
     all_sprites = pygame.sprite.Group()
 
     running = True
     clock = pygame.time.Clock()
-    but1 = But(WIDTH, HEIGHT, 70, "return.png")
-    but2 = But(WIDTH, HEIGHT, 70, "onemoretime.png")
+    but1 = But(WIDTH, HEIGHT, 70, "img/return.png")
+    but2 = But(WIDTH, HEIGHT, 70, "img/onemoretime.png")
     all_sprites.add(but1, but2)
 
     intro_text = ["GAME OVER"]

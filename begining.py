@@ -37,15 +37,15 @@ def Begining():
     WIDTH, HEIGHT = 650, 650
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Begining")
-    background = pygame.image.load("backgroundfor.jpg").convert()
+    background = pygame.image.load("img/backgroundfor.jpg").convert()
     background = pygame.transform.scale(background, (750, 750))
     all_sprites = pygame.sprite.Group()
 
     running = True
     clock = pygame.time.Clock()
-    but1 = But(WIDTH // 3 - 50, HEIGHT // 2 - 35, 70, "settings.png")
-    but2 = But(WIDTH // 2 - 50, HEIGHT // 2 - 50, 100, "Play.png")
-    but3 = But(WIDTH // 3 * 2 - 20, HEIGHT // 2 - 35, 70, "leaders.png")
+    but1 = But(WIDTH // 3 - 50, HEIGHT // 2 - 35, 70, "img/settings.png")
+    but2 = But(WIDTH // 2 - 50, HEIGHT // 2 - 50, 100, "img/Play.png")
+    but3 = But(WIDTH // 3 * 2 - 20, HEIGHT // 2 - 35, 70, "img/leaders.png")
     all_sprites.add(but1, but2, but3)
 
     while running:
