@@ -2,6 +2,8 @@ import pygame
 import sys
 import os
 
+from db import change
+
 
 def load_image(name, colorkey=None):
     fullname = os.path.join(name)
@@ -13,6 +15,7 @@ def load_image(name, colorkey=None):
 
 
 class But(pygame.sprite.Sprite):
+    from db import change
     def __init__(self, WIDTH, HEIGHT, low, name):
         pygame.sprite.Sprite.__init__(self)
         self.image = load_image(name)
@@ -24,6 +27,12 @@ class But(pygame.sprite.Sprite):
     def clicked(self, x, y, func):
         if self.rect.collidepoint(x, y):
             func()
+
+    def changes(self, x, y, func, name, score):
+        if self.rect.collidepoint(x, y):
+            change(name, score)
+            func()
+
 
 
 def Begining(battle_music=None, sound_enabled=True):
@@ -56,7 +65,7 @@ def Begining(battle_music=None, sound_enabled=True):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
                 but1.clicked(mouse_x, mouse_y, lambda: Settings(battle_music, sound_enabled))
-                but2.clicked(mouse_x, mouse_y, lambda: Auto())
+                but2.clicked(mouse_x, mouse_y, lambda: Auto(battle_music, sound_enabled))
                 but3.clicked(mouse_x, mouse_y, lambda: leaders(battle_music, sound_enabled))
 
         all_sprites.update()
