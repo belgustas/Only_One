@@ -14,12 +14,13 @@ class Aid(pygame.sprite.Sprite):
 
     def collide(self, health, player):
         if self.rect.colliderect(player):
-            player.hp += 1
-            health.hp += 1
+            player.hp += 30
+            health.hp += 30
             if player.hp >= 100 and health.hp >= 100:
                 player.hp = 100
                 health.hp = 100
             self.kill()
+            self.rect.x = 1000
 
 
 class Ammos():
