@@ -34,9 +34,10 @@ def Auto(battle_music=None, sound_enabled=True):
             if need_inp and event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     input(input_text)
+                    print(input_text)
                     main(battle_music, sound_enabled, input_text)
                 elif event.key == pygame.K_BACKSPACE:
-                    pass
+                    input_text = input_text[:-1]
                 else:
                     input_text += event.unicode
 

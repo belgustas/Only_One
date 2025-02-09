@@ -62,8 +62,8 @@ def main(battle_music, sound_enabled, name):  # главная функция
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if menuning:
                     mouse_x, mouse_y = pygame.mouse.get_pos()
-                    again.clicked(mouse_x, mouse_y, lambda: main(battle_music, sound_enabled, name))
-                    home.clicked(mouse_x, mouse_y, lambda: Begining(battle_music, sound_enabled))
+                    again.changes(mouse_x, mouse_y, lambda: main(battle_music, sound_enabled, name), name, player.point)
+                    home.changes(mouse_x, mouse_y, lambda: Begining(battle_music, sound_enabled), name, player.point)
 
         if player.counte == 500:
             enemy = Enemy(uniform(0, WIDTH), uniform(0, HEIGHT), player, 100)
@@ -108,7 +108,7 @@ def main(battle_music, sound_enabled, name):  # главная функция
             if enemy.hp_enemy <= 0:
                 enemy.kill()
                 health_bar_enemy.kill()
-            player.collide(health_bar_enemy, enemy)
+            player.collide(health_bar_player, enemy)
 
         player.counter()
         screen.blit(font.render(f"Points:{player.point}", 1, pygame.Color('Red')), (550, 25))

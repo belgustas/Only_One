@@ -62,6 +62,7 @@ class Player(pygame.sprite.Sprite):
                 change(self.name, self.point)
 
 
+
     def update(self):
         self.run()
         self.animation()
