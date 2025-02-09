@@ -12,7 +12,8 @@ def main():
     from begining import Begining
     pygame.init()
     aids = []
-
+    enemys = []
+    bars = []
     # Настройки окна
     WIDTH, HEIGHT = 650, 650
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -24,8 +25,10 @@ def main():
     bow = BowBar(0)
     player = Player(WIDTH // 2, HEIGHT // 2, all_sprites, 100)
     health_bar_player = HealthBarPlayer(player, 50, 5, player.hp)
-    enemy = Enemy(100, 100, player, 100)
+    enemy = Enemy(uniform(0, WIDTH), uniform(0, HEIGHT), player, 100)
     health_bar_enemy = HealthBarEnemy(enemy, 50, 5, 100)
+
+
 
     all_sprites.add(player, enemy, bow)
 
@@ -35,13 +38,15 @@ def main():
 
     # меню
     menu_sprites = pygame.sprite.Group()
-    again = But(WIDTH // 2 - 30, HEIGHT // 2 - 60, 70, "img/return.png")
-    home = But(WIDTH // 2 - 30, HEIGHT // 2 - 150, 70, "img/home.png")
+    again = But(WIDTH // 2 - 30, HEIGHT // 2 - 60, 70, "return.png")
+    home = But(WIDTH // 2 - 30, HEIGHT // 2 - 150, 70, "home.png")
     menu_sprites.add(again, home)
 
     # музыка
     battle_music = pygame.mixer.Sound("sounds/battle_music.mp3")
     battle_music.set_volume(0.3)
+
+    font = pygame.font.Font(None, 30)
 
     while running:
         # запускаем музыку
@@ -86,7 +91,7 @@ def main():
             enemy.speed = 1.25
 
         if player.count == 1000:
-            aid = Aid(uniform(0, 650), uniform(0, 650), "img/aid.png", all_sprites)
+            aid = Aid(uniform(0, 650), uniform(0, 650), "aid.png", all_sprites)
             all_sprites.add(aid)
             aids.append(aid)
             player.count = 0
@@ -98,7 +103,7 @@ def main():
         # Обновление всех спрайтов
         for bullet in [sprite for sprite in all_sprites if isinstance(sprite, Bullet)]:
             for enemy in [sprite for sprite in all_sprites if isinstance(sprite, Enemy)]:
-                enemy.collide_with_bullet(bullet, health_bar_enemy)
+                enemy.collide_with_bullet(bullet, health_bar_enemy, player)
 
         all_sprites.draw(screen)
         health_bar_player.update()
@@ -106,9 +111,14 @@ def main():
         all_sprites.update()
 
         player.collide(health_bar_player, enemy)
-
         for i in aids:
             i.collide(health_bar_player, player)
+
+        string_rendered = font.render(f"Points:{player.point}", 1, pygame.Color('Red'))
+        intro_rect = string_rendered.get_rect()
+        intro_rect.x = 550
+        intro_rect.y = 25
+        screen.blit(string_rendered, intro_rect)
 
         health_bar_player.draw(screen)
         health_bar_enemy.draw(screen)
