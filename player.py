@@ -49,6 +49,7 @@ class Player(pygame.sprite.Sprite):
         self.count += 1
 
     def collide(self, health_bar_player, enemy):
+        from ending import Ending
         from db import change
         # отчет времени спавна аптечек
         if enemy.hp_enemy > 0:
@@ -60,6 +61,7 @@ class Player(pygame.sprite.Sprite):
             if self.hp <= 0:
                 self.kill()
                 change(self.name, self.point)
+                Ending()
 
 
     def update(self):
