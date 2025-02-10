@@ -1,4 +1,4 @@
-import pygame  # импорт
+import pygame  # импортn
 
 
 def Ending_win(battle_music, sound_enabled, name, points):  # если игрок выиграл, финальное окно
