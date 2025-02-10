@@ -5,6 +5,7 @@ def choose(name, battle_music=None, sound_enabled=True):
     from main import main
     from db import input
     from New_level import main2
+    from New_level2 import main3
 
     pygame.init()
     WIDTH, HEIGHT = 650, 650
@@ -51,6 +52,8 @@ def choose(name, battle_music=None, sound_enabled=True):
                     main(battle_music, sound_enabled, name)
                 if intro_rect2.collidepoint(mouse_x, mouse_y):
                     main2(battle_music, sound_enabled, name)
+                if intro_rect3.collidepoint(mouse_x, mouse_y):
+                    main3(battle_music, sound_enabled, name)
 
 
 
