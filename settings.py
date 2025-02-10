@@ -1,4 +1,4 @@
-import pygame
+import pygame  # kuku
 
 
 def Settings(battle_music, sound_enabled):  # настройки... музыкаАААА
