@@ -5,6 +5,7 @@ import os
 from db import change
 
 
+# если изображение не найдено
 def load_image(name, colorkey=None):
     fullname = os.path.join(name)
     if not os.path.isfile(fullname):
@@ -14,7 +15,7 @@ def load_image(name, colorkey=None):
     return image
 
 
-class But(pygame.sprite.Sprite):
+class But(pygame.sprite.Sprite):  # кнопка
     def __init__(self, WIDTH, HEIGHT, low, name):
         pygame.sprite.Sprite.__init__(self)
         self.image = load_image(name)
@@ -27,19 +28,18 @@ class But(pygame.sprite.Sprite):
         if self.rect.collidepoint(x, y):
             func()
 
-    def changes(self, x, y, func, name, score):
+    def changes(self, x, y, func, name, score):  # изменения
         if self.rect.collidepoint(x, y):
             change(name, score)
             func()
 
 
-def Begining(battle_music=None, sound_enabled=True):
+def Begining(battle_music, sound_enabled):  # начальное окно
     from Auto import Auto
-    from main import main
     from leaders import leaders
     from settings import Settings
     pygame.init()
-
+    # привет)
     WIDTH, HEIGHT = 650, 650
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Begining")
@@ -62,6 +62,7 @@ def Begining(battle_music=None, sound_enabled=True):
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
+                print(battle_music, sound_enabled)
                 but1.clicked(mouse_x, mouse_y, lambda: Settings(battle_music, sound_enabled))
                 but2.clicked(mouse_x, mouse_y, lambda: Auto(battle_music, sound_enabled))
                 but3.clicked(mouse_x, mouse_y, lambda: leaders(battle_music, sound_enabled))
@@ -80,4 +81,4 @@ if __name__ == "__main__":
     battle_music = pygame.mixer.Sound("sounds/battle_music.mp3")
     battle_music.set_volume(0.3)
     battle_music.play(-1)
-    Begining(battle_music, True)
+    Begining(battle_music, 0.3)

@@ -6,7 +6,7 @@ from enemy import Enemy, HealthBarEnemy
 from bowbar import BowBar
 
 
-def main(battle_music, sound_enabled, name):  # главная функция
+def main(battle_music, sound_enabled, name):  # первый уровень
     from begining import But
     from aid_ammo import Aid
     from begining import Begining
@@ -22,7 +22,7 @@ def main(battle_music, sound_enabled, name):  # главная функция
 
     all_sprites = pygame.sprite.Group()
     bow = BowBar(0)
-    player = Player(WIDTH // 2, HEIGHT // 2, all_sprites, 100, name, battle_music, sound_enabled)
+    player = Player(WIDTH // 2, HEIGHT // 2, all_sprites, 100, name, 10)
     health_bar_player = HealthBarPlayer(player, 50, 5, player.hp)
 
     all_sprites.add(player, bow)
@@ -62,12 +62,13 @@ def main(battle_music, sound_enabled, name):  # главная функция
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if menuning:
                     mouse_x, mouse_y = pygame.mouse.get_pos()
+                    print(battle_music, sound_enabled)
                     again.changes(mouse_x, mouse_y, lambda: main(battle_music, sound_enabled, name), name, player.point)
                     home.changes(mouse_x, mouse_y, lambda: Begining(battle_music, sound_enabled), name, player.point)
 
-        if player.counte == 100:
-            enemy = Enemy(uniform(0, WIDTH), uniform(0, HEIGHT), player, 100)
-            health_bar_enemy = HealthBarEnemy(enemy, 50, 5, 100)
+        if player.counte == 500:
+            enemy = Enemy(uniform(0, WIDTH), uniform(0, HEIGHT), player, 60)
+            health_bar_enemy = HealthBarEnemy(enemy, 50, 5, 60)
             all_sprites.add(enemy)
             enemys.append(enemy)
             bars.append(health_bar_enemy)
@@ -108,13 +109,12 @@ def main(battle_music, sound_enabled, name):  # главная функция
             if enemy.hp_enemy <= 0:
                 enemy.kill()
                 health_bar_enemy.kill()
-            player.collide(health_bar_player, enemy)
+            player.collide(health_bar_player, enemy, sound_enabled, battle_music)
 
         player.counter()
         screen.blit(font.render(f"Points:{player.point}", 1, pygame.Color('Red')), (550, 25))
-
-        print(player.counte, player.count)
         health_bar_player.draw(screen)
+
         for health_bar_enemy in bars:
             health_bar_enemy.draw(screen)
 

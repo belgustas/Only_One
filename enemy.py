@@ -1,7 +1,7 @@
 import pygame
 
 
-class Enemy(pygame.sprite.Sprite):
+class Enemy(pygame.sprite.Sprite):  # враг
     def __init__(self, x, y, target, hp):
         super().__init__()
         self.sprite_sheet = pygame.image.load("img/Enemy.png").convert_alpha()
@@ -30,7 +30,7 @@ class Enemy(pygame.sprite.Sprite):
         self.move_towards_player()
         self.animate()
 
-    def move_towards_player(self):
+    def move_towards_player(self):  # движение за игроком
         if self.rect.x < self.target.rect.x:
             self.rect.x += self.speed
             self.current_direction = "right"
@@ -55,19 +55,20 @@ class Enemy(pygame.sprite.Sprite):
 
     def collide_with_bullet(self, bullet, health_bar_enemy, player):
         if pygame.sprite.collide_mask(self, bullet):  # Проверяем столкновение по маскам
-            self.hp_enemy -= 100
-            health_bar_enemy.hp -= 100
-            bullet.kill()  # Удаляем пулю
+            self.hp_enemy -= 20
+            health_bar_enemy.hp -= 20
+            bullet.kill()
             if self.hp_enemy <= 0:
-                self.kill()  # Удаляем врага
+                self.kill()
                 health_bar_enemy.kill()
                 player.point += 1
+                self.rect.x = 1000
 
-    def distance_to_player(self):
+    def distance_to_player(self):  # дистанция между врагом и игроком(target)
         return abs(self.target.rect.x - self.rect.x) + abs(self.target.rect.y - self.rect.y)
 
 
-class HealthBarEnemy(pygame.sprite.Sprite):
+class HealthBarEnemy(pygame.sprite.Sprite):  # здоровье врага
     def __init__(self, enemy, w, h, max_hp):
         super().__init__()
         self.enemy = enemy  # Связываем хп с врага
@@ -76,17 +77,28 @@ class HealthBarEnemy(pygame.sprite.Sprite):
         self.hp = max_hp
         self.max_hp = max_hp
         self.x = self.enemy.rect.centerx - self.w // 2  # Центрируем по х
-        self.y = self.enemy.rect.top - self.h - 5  # Чуть выше игрока
+        self.y = self.enemy.rect.top - self.h - 5
+
+        self.x_hp = self.enemy.rect.centerx - self.w // 2  # Центрируем по х
+        self.y_hp = self.enemy.rect.top - self.h - 5
+        self.font = pygame.font.Font(None, 24)
 
     def update(self):
         if self.enemy.hp_enemy > 0:  # Обновляем только если враг жив
             self.x = self.enemy.rect.centerx - self.w // 2
             self.y = self.enemy.rect.top - self.h - 5
+
+            self.x_hp = self.enemy.rect.centerx - self.w // 2
+            self.y_hp = self.enemy.rect.top - self.h - 25
+
         else:
             self.kill()
 
     def draw(self, surface):
         if self.enemy.hp_enemy > 0:
-            count_hp = self.hp / self.max_hp  # Рассчитываем % здоровья
-            pygame.draw.rect(surface, "red", (self.x, self.y, self.w, self.h))  # Фон (красный)
-            pygame.draw.rect(surface, "green", (self.x, self.y, self.w * count_hp, self.h))  # Текущий хп (зеленый)
+            count_hp = self.hp / self.max_hp
+            pygame.draw.rect(surface, "red", (self.x, self.y, self.w, self.h))
+            pygame.draw.rect(surface, "green", (self.x, self.y, self.w * count_hp, self.h))
+
+            hp_text = self.font.render(f"HP: {self.hp}", True, (pygame.Color("red")))
+            surface.blit(hp_text, (self.x_hp, self.y_hp))

@@ -2,14 +2,11 @@ import pygame
 import math
 
 
-class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y, all_sprites, hp, name, battle_music, sound_enabled):
+class Player(pygame.sprite.Sprite):  # игрок
+    def __init__(self, x, y, all_sprites, hp, name, damage):
         super().__init__()
         self.all_sprites = all_sprites
-        # музыка
 
-        self.battle_music = battle_music
-        self.sound_enabled = sound_enabled
         self.sprite_sheet = pygame.image.load("img/Player.png").convert_alpha()
 
         # Ряды в спрайтшите для анимации
@@ -46,31 +43,37 @@ class Player(pygame.sprite.Sprite):
         self.counte = 0
         self.point = 0
         self.name = name
+        self.damage = damage
 
     def counter(self):
         self.counte += 1
         self.count += 1
 
-    def collide(self, health_bar_player, enemy):
+    def collide(self, health_bar_player, enemy, battle_music, sound_enabled):  # уменьшение хп
         from ending import Ending
         from db import change
         # отчет времени спавна аптечек
         if enemy.hp_enemy > 0:
             current_time = pygame.time.get_ticks()
             if enemy.distance_to_player() < 25 and current_time - self.last_update_attack > 1000:
-                self.hp -= 10
-                health_bar_player.hp -= 10
+                self.hp -= self.damage
+                health_bar_player.hp -= self.damage
                 self.last_update_attack = current_time
             if self.hp <= 0:
                 self.kill()
                 change(self.name, self.point)
-                Ending(self.battle_music, self.sound_enabled, self.name, self.point)
+                Ending(battle_music, sound_enabled, self.name, self.point)
+
+            from ending_win import Ending_win
+
+            # сообщаем об выиграше
+            if self.point == 10:
+                Ending_win(battle_music, sound_enabled, self.name, self.point)
 
     def update(self):
         self.run()
         self.animation()
         self.check_afk()
-        self.check_win(self.point)
 
     def run(self):
         if self.is_shooting:  # Если игрок стреляет, он не должен двигаться
@@ -163,13 +166,6 @@ class Player(pygame.sprite.Sprite):
         if not self.is_moving and pygame.time.get_ticks() - self.afk_timer > 10000:
             self.image = self.stop_cadr  # Если прошло 10 секунд без движения — ставим AFK-кадр
 
-    def check_win(self, point):
-        from ending_win import Ending_win
-
-        # сообщаем об выиграше
-        if point > 11:
-            Ending_win(self.battle_music, self.sound_enabled, self.name, self.point)
-
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, player_x, player_y, mouse_x, mouse_y):
@@ -217,13 +213,23 @@ class HealthBarPlayer(pygame.sprite.Sprite):
         self.max_hp = max_hp
         self.x = self.player.rect.centerx - self.w // 2  # Центрируем по х
         self.y = self.player.rect.top - self.h - 5  # Чуть выше игрока
+        self.x_hp = self.player.rect.centerx - self.w // 2  # Центрируем по х
+        self.y_hp = self.player.rect.top - self.h - 25  # Чуть выше полоски здоровья
+        self.font = pygame.font.Font(None, 24)  # Шрифт для отображения хп
 
     def update(self):
-        # координаты игрока
+        # координаты healthbar
         self.x = self.player.rect.centerx - self.w // 2
         self.y = self.player.rect.top - self.h - 5
+        # координаты цифр
+        self.x_hp = self.player.rect.centerx - self.w // 2
+        self.y_hp = self.player.rect.top - self.h - 25
 
     def draw(self, surface):
         count_hp = self.hp / self.max_hp  # Рассчитываем % здоровья
         pygame.draw.rect(surface, "red", (self.x, self.y, self.w, self.h))  # Фон (красный)
         pygame.draw.rect(surface, "green", (self.x, self.y, self.w * count_hp, self.h))  # Текущий хп (зеленый)
+
+        # Отображение количества хп
+        hp_text = self.font.render(f"HP: {self.hp}", True, (pygame.Color("red")))
+        surface.blit(hp_text, (self.x_hp, self.y_hp))

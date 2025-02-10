@@ -1,7 +1,7 @@
 import pygame  # импорт
 
 
-def Ending(battle_music, sound_enabled, name, points):
+def Ending(battle_music, sound_enabled, name, points):  # если игрок проиграл, финальное окно
     from begining import Begining
     from begining import But
     from main import main

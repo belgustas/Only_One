@@ -3,7 +3,7 @@ from begining import load_image
 from random import uniform
 
 
-class Aid(pygame.sprite.Sprite):
+class Aid(pygame.sprite.Sprite):  # аптечки
     def __init__(self, WIDTH, HEIGHT, name, all_sprites):
         pygame.sprite.Sprite.__init__(self)
         self.all_sprites = all_sprites
@@ -12,7 +12,7 @@ class Aid(pygame.sprite.Sprite):
         self.rect.x = WIDTH
         self.rect.y = HEIGHT
 
-    def collide(self, health, player):
+    def collide(self, health, player):  # если игрок ее собрал
         if self.rect.colliderect(player):
             player.hp += 30
             health.hp += 30
@@ -21,7 +21,3 @@ class Aid(pygame.sprite.Sprite):
                 health.hp = 100
             self.kill()
             self.rect.x = 1000
-
-
-class Ammos():
-    pass

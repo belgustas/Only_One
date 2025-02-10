@@ -1,7 +1,7 @@
 import pygame
 
 
-class BowBar(pygame.sprite.Sprite):
+class BowBar(pygame.sprite.Sprite):  # тетива
     def __init__(self, counter):
         pygame.sprite.Sprite.__init__(self)
         self.count = counter

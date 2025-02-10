@@ -1,9 +1,12 @@
 import pygame
 
+from Choose import choose
 
-def Auto(battle_music=None, sound_enabled=True):
+
+def Auto(battle_music, sound_enabled):  # авторизация
     from main import main
     from db import input
+    from Choose import choose
     pygame.init()
     font = pygame.font.Font(None, 30)
 
@@ -31,8 +34,8 @@ def Auto(battle_music=None, sound_enabled=True):
             if need_inp and event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     input(input_text)
-                    print(input_text)
-                    main(battle_music, sound_enabled, input_text)
+                    print(battle_music, sound_enabled)
+                    choose(battle_music, sound_enabled, input_text)
                 elif event.key == pygame.K_BACKSPACE:
                     input_text = input_text[:-1]
                 else:

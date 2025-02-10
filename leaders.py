@@ -1,7 +1,7 @@
 import pygame
 
 
-def leaders(battle_music, sound_enabled):
+def leaders(battle_music, sound_enabled):  # лидеры
     from begining import Begining
     from begining import But
     from db import leadtable  # Функция для загрузки данных из БД

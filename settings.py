@@ -1,7 +1,7 @@
 import pygame
 
 
-def Settings(battle_music, sound_enabled):
+def Settings(battle_music, sound_enabled):  # настройки... музыкаАААА
     from begining import Begining
     from begining import But
 
@@ -10,8 +10,8 @@ def Settings(battle_music, sound_enabled):
     WIDTH, HEIGHT = 650, 650
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Settings")
-    background = pygame.image.load("img/backgroundset.png").convert()
-    background = pygame.transform.scale(background, (750, 750))
+    background = pygame.image.load("img/settings.jpg").convert()
+    background = pygame.transform.scale(background, (700, 700))
     all_sprites = pygame.sprite.Group()
 
     but1 = But(0, 0, 70, "img/return.png")
@@ -20,7 +20,7 @@ def Settings(battle_music, sound_enabled):
 
     running = True
     clock = pygame.time.Clock()
-    font = pygame.font.Font(None, 36)  # Шрифт для текста
+    font = pygame.font.Font(None, 36)
 
     while running:
         screen.blit(background, (-50, -50))
@@ -40,7 +40,7 @@ def Settings(battle_music, sound_enabled):
 
         # Отображение состояния звука
         sound_status = "Sound: ON" if sound_enabled else "Sound: OFF"
-        text = font.render(sound_status, True, (255, 255, 255))
+        text = font.render(sound_status, True, (0, 0, 0))
         screen.blit(text, (WIDTH // 2 - 60, HEIGHT // 2 + 50))  # Размещаем текст чуть ниже кнопки
 
         pygame.display.flip()
